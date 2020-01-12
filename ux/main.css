@@ -1,0 +1,207 @@
+:root {
+    --main-color: beige;
+    --odd-table-color: lightblue;
+    --even-table-color: #88d0ff;
+    --hidden-color: beige;
+    --left-offset:5%;
+    --width:80%;
+    --font-size:14pt;
+}
+body{
+    background-color: var(--main-color);
+    font-family: Arial,SansSerif;
+    font-size: var(--font-size);
+}
+body.waiting {
+    cursor: progress;
+    opacity: 0.25
+}
+
+#notes{
+    width: 100%;
+    height: 100%;
+}
+div.top{
+    border: 2px solid yellow;
+    position: relative;
+    height: 100px;
+    left: var(--left-offset);
+    width: var(--width);
+}
+div.title{
+    position: absolute;
+    left: 10px;
+    width: 5%;
+    font-size: 12pt;
+    padding: 10px;
+}
+div.menu{
+    position:absolute;
+    top: 10px;
+    left: 10%;
+    width: 80%;
+
+    font-size: 12pt;
+}
+div.contentroot{
+    border: 2px solid red;
+    position: relative;
+    height: 80%;
+    left: var(--left-offset);
+    width: var(--width);
+}
+div.content{
+}
+
+div.report {
+    position: relative;
+    left: var(--left-offset);
+    width: var(--width);
+    scroll-behavior: auto;
+}
+
+div.login{
+    position: relative;
+    left: 15%;
+    width: 80%;
+    padding: 10px;
+}
+
+
+div.tablediv{
+    background-color: var(--hidden-color);
+    position: relative;
+    left: var(--left-offset);
+    width: var(--width);
+    overflow-y: auto;
+}
+
+div.menu table{
+    margin: 0 auto;
+    font-size: 8pt;
+}
+div.menu td{
+    padding: 24px;
+}
+div.menu-item{
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+}
+img.menulogo{
+    width: 32px;
+    height: 32px;
+}
+span.menutext{
+    display: block;
+}
+
+
+
+div.title img{
+    vertical-align: middle;
+    horiz-align: center;
+}
+span.button-menus{
+    position: relative;
+    left: var(--left-offset);
+    width: var(--width);
+    background-color: var(--main-color);
+}
+
+table.loglist {
+
+}
+table.report{
+    width: 80%;
+    horiz-align: center;
+}
+table.report th{
+    font-weight: bold;
+    padding: 6px;
+}
+table.report td{
+    padding: 6px;
+}
+.odd-table-row{
+    background-color: var(--odd-table-color);
+}
+.even-table-row{
+    background-color: var(--even-table-color);
+}
+table.loglist{
+    width: 100%;
+}
+table.loglist a:link{
+    color:blue;
+    text-decoration: none;
+}
+table.loglist a:visited{
+    color:blue;
+    text-decoration: none;
+}
+table.loglist tr td{
+    background-color: var(--main-color);
+    padding: 6px;
+}
+span.datetime{
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+table.entry-form{
+    width: 100%;
+}
+table.entry-form tr{
+    background-color: var(--main-color);
+}
+table.entry-form th{
+    text-align: right;
+    padding:6px;
+    margin: 10px;
+}
+table.entry-form td{
+    padding:6px;
+    margin: 10px;
+}
+
+
+table.pcr-interventions{
+    width: 100%;
+}
+table.pcr-interventions tr{
+    background-color: var(--main-color);
+}
+table.pcr-interventions th{
+    text-align: right;
+    padding:6px;
+    margin: 10px;
+}
+table.pcr-interventions td{
+    padding:6px;
+    margin: 10px;
+}
+
+
+span.ptname{
+    padding-left: 10px;
+    font-size: 12pt;
+}
+
+span.cc{
+    font-size: 14pt;
+}
+span.buttonbox{
+    position: relative;
+    left:40%;
+}
+input.form{
+    font-size: var(--font-size);
+}
+
+input.incrementbutton{
+    width: 100%;
+    height: 100%;
+    font-size: var(--font-size);
+}

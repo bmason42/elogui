@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PT Log</title>
+
+    <link href="main.css" rel="stylesheet">
+    <link href="scripts/manifest.json" rel="manifest">
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/menu.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $(document).ajaxError(errorHandler);
+            registerBackgroundWorkers();
+            initMenu()
+            switchCards("#settings")
+            /*
+            var myCallback=function(){
+                var hours=localStorage.getItem(LOGLIST_START_HOURS);
+                var pageSize=localStorage.getItem(LOGLIST_PAGE_SIZE);
+                hours = hours == null? 1 : hours
+                pageSize=pageSize== null ? 100 : pageSize;
+                $("#startTimeInput").val(hours);
+                $("#pageSizeInput").val(pageSize);
+
+                fillCCSelect();
+                fillDispoSelect();
+                fillTxSelect();
+                fillCareLevelSelect();
+                chooseEventAndStationOnLogEntryPage();
+
+                fillEventList()
+                var eventId=getCurrentEventId()
+
+                $("#eventlist").val(eventId)
+                $("#eventlist").change();
+                switchCards("#settings")
+
+            };
+            fetchListData(myCallback);
+            fetchGiftItems();
+            buildGiftTable();
+
+            $("#currentUser").text(localStorage.getItem(CURRENT_USERID))
+
+             */
+
+        });
+
+    </script>
+</head>
+<body>
+<div class="top">
+    <div class="title">
+        <img class="menulogo" src="images/logo.png">
+        <span id="currentUser">Bob</span>
+    </div>
+    <div class="menu" id="menu">
+        <table>
+            <tr>
+
+                <td>
+                    <a href="#" id="settingsmenu">
+                        <div class="menu-item">
+                            <img class="menulogo" src="images/settings.png">
+                            <span class="menutext">Settings</span>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" id="logmenu">
+                        <div class="menu-item">
+                            <img class="menulogo" src="images/list-icon.png">
+                            <span class="menutext">Log</span>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" id="entrymenu">
+                        <div class="menu-item">
+                            <img class="menulogo" src="images/logentry-icon.png">
+                            <span class="menutext">Entry</span>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" id="pcrmenu">
+                        <div class="menu-item">
+                            <img class="menulogo" src="images/pcr-icon.png">
+                            <span class="menutext">PCR</span>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" id="giftsmenu">
+                        <div class="menu-item">
+                            <img class="menulogo" src="images/gifted-icon.png">
+                            <span class="menutext">Gifted</span>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" id="logoutmenu">
+                        <div class="menu-item">
+                            <img class="menulogo" src="images/logout.png">
+                            <span class="menutext">Logout</span>
+                        </div>
+                    </a>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="contentroot" id="content">
+    <div class="content" id="settings">
+        <form>
+            <div class="tablediv">
+                <table class="entry-form">
+                    <tbody id="settingsform">
+                    <tr>
+                        <th>Event:</th>
+                        <td>
+                            <select id="eventlist" name="eventlist" onchange="onEventChange(this)">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Unit/Station:</th>
+                        <td>
+                            <select id="unit" name="unit" onchange="onStationChange(this)">
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+
+    <div class="content" id="log">
+        <form>
+            <span class="button-menus">
+                Hours to view:
+                <input id=startTimeInput onclick="onNext()" type="number" value="1">
+                Max Records:
+                 <input id=pageSizeInput onclick="onNext()" type="number" value="100">
+                <input onclick="fetchRecords()" type="button" value="Refresh">
+            </span>
+        </form>
+        </p>
+        <div class="tablediv">
+            <table class="loglist" id="loglist">
+                <tbody id="summaryTB">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="content" id="entry">
+        <form>
+
+
+            <div class="tablediv">
+
+                <input id="id" name="id" type="hidden" value="0">
+                <table class="entry-form">
+                    <tr>
+                        <th>Event:</th>
+                        <td>
+                    <span id="eventname" name="eventname">
+                    </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Unit/Station:</th>
+                        <td>
+                            <select id="logentryunit" name="logentryunit">
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Dispatch / Arrival:</th>
+                        <td><input id="arrival" type="datetime-local"></td>
+                    </tr>
+                    <tr>
+                        <th>Available / Released:</th>
+                        <td><input id="released" type="datetime-local"></td>
+                    </tr>
+                    <tr>
+                        <th>PT Name:</th>
+                        <td><input id="ptname" name="ptname"/></td>
+                    </tr>
+                    <tr>
+                        <th>PT Camp:</th>
+                        <td><input id="ptcamp" name="ptcamp" type="text"/></td>
+                    </tr>
+                    <tr>
+                        <th>PT Age:</th>
+                        <td>
+                    <span>
+                        <input id="ptage" name="ptage" type="number"/>
+                        <input id="ageAsMonths" type="checkbox" value="yes"> Months
+                    </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Medical Gender:</th>
+                        <td>
+                            <select id="ptsex" name="ptsex">
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                                <option value="tfemale">Trans Gender Female</option>
+                                <option value="tmale">Trans Gender Male</option>
+                                <option value="none">Not identified</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Incident Location</th>
+                        <td>
+                            <input id="location" name="location" type="localtion"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Arm Band/PCR</th>
+                        <td>
+                            <input id="tracking" name="tracking"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Chief Complaint:</th>
+                        <td>
+                            <select id="cc" name="cc">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Treatment:</th>
+                        <td>
+                            <select id="tx" name="tx">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Disposition:</th>
+                        <td>
+                            <select id="disp" name="disp">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Provider:</th>
+                        <td><input id="provider" name="provider" type="text"/></td>
+                    </tr>
+                    <tr>
+                        <th>Care Level:</th>
+                        <td>
+                            <select id="carelevel" name="carelevel">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Notes:</th>
+                        <td><textarea id="notes" id="notes" name="notes" rows="3"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                <span class="buttonbox">
+                    <input class="form" id="savebutton" onclick="saveLogEntryData(false)" type="button" value="Save">
+                    <input class="form" id="doneButton" onclick="saveLogEntryData(true)" type="button" value="Done">
+                    <input class="form" id="copyButton" onclick="mkCopy()" type="button" value="Copy">
+                    <span id="savestatus"></span>
+                </span>
+
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="content" id="pcr">
+        <div class="tablediv">
+            <table class="entry-form">
+                <tr>
+                    <td>Tracking :</td>
+                    <td><input id="pcr_tracking_search" type="text"></td>
+                </tr>
+                <tr>
+                    <td>History:</td>
+                    <td><input id="pcr_history" type="text"></td>
+                </tr>
+                <tr>
+                    <td>Medications :</td>
+                    <td><input id="pcr_medications" type="text"></td>
+                </tr>
+                <tr>
+                    <td>Allergies :</td>
+                    <td><input id="pcr_allergies" type="text"></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table class="entry-form">
+                <tr>
+                    <td>Actions</td>
+                    <td><input type="button" value="Add Vitals"></td>
+                    <td><input type="button" value="Add Intervention"></td>
+                </tr>
+            </table>
+            <table class="pcr-interventions">
+                <tr>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Provider</th>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <div class="content" id="gift">
+        gift
+        <form>
+            <div class="tablediv">
+                <table class="entry-form">
+                    <tbody id="giftedsupplies">
+
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
