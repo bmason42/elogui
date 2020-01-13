@@ -1,14 +1,14 @@
 {
-  "short_name": "Logs",
-  "name": "Event Medical Log",
+  "short_name": "Logs-v2",
+  "name": "Event Medical Log V2",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/images/logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/logo.png",
+      "src": "/images/logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }

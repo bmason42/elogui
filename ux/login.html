@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="main.css"/>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/main.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            //window.open("settings.html",'_self',false)
+
+        });
+
+        function dologin() {
+            turnOnwait()
+            var data = new Object()
+            data.userID = $("#userid").val()
+            data.password = $("#password").val()
+            var json = JSON.stringify(data);
+            $("#errormsg").text("")
+            $.ajax({
+                type: 'POST',
+                url: "/elog/v2/login/",
+                contentType: "application/json",
+                processData: false,
+                data: json,
+                dataType: "text"
+            }).done(function (newOb) {
+                    console.log("Success")
+                    var tokenData = JSON.parse(newOb)
+                    var token=tokenData.token
+                    localStorage.setItem(CURRENT_USERID, data.userID)
+                    localStorage.setItem(AUTH_TOKEN,token)
+                    window.open("/", '_self', false)
+                }
+            ).fail(function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status)
+                    var msg
+                    if (xhr.status == 401) {
+                        msg = "Bad User ID or Password"
+                    } else {
+                        msg = "Unknown Error: " + xhr.status
+                    }
+                    $("#errormsg").text(msg)
+                }
+            ).always(function () {
+                    turnOffWait()
+                }
+            )
+        }
+    </script>
+</head>
+
+<body>
+<div class="title">
+    <img width="48" height="48" src="images/logo.png">
+    Patient Log Sheet
+</div>
+<div class="login">
+    <form>
+        <table>
+            <tr>
+                <td>User Id:</td>
+                <td><input type="text" autocapitalize="none" name="userid" id="userid"></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="password" id="password"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="button" name="login" value="Login" onclick="dologin()"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span id="errormsg"></span>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

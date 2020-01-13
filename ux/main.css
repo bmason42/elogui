@@ -22,17 +22,18 @@ body.waiting {
     height: 100%;
 }
 div.top{
-    border: 2px solid yellow;
+    border-bottom: 2px solid lightgray;
     position: relative;
     height: 100px;
     left: var(--left-offset);
     width: var(--width);
 }
+
 div.title{
     position: absolute;
     left: 10px;
-    width: 5%;
-    font-size: 12pt;
+    width: 10%;
+    font-size: 8pt;
     padding: 10px;
 }
 div.menu{
@@ -44,7 +45,6 @@ div.menu{
     font-size: 12pt;
 }
 div.contentroot{
-    border: 2px solid red;
     position: relative;
     height: 80%;
     left: var(--left-offset);
@@ -159,11 +159,17 @@ table.entry-form tr{
 table.entry-form th{
     text-align: right;
     padding:6px;
+    font-size: 10pt;
+    font-weight: bold;
     margin: 10px;
 }
 table.entry-form td{
     padding:6px;
     margin: 10px;
+    font-size: 10pt;
+}
+input.entry-form{
+    font-size: 10pt;
 }
 
 

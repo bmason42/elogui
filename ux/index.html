@@ -8,6 +8,8 @@
     <script src="scripts/jquery.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/menu.js"></script>
+    <script src="scripts/settings.js"></script>
+    <script src="scripts/logentry.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -15,7 +17,7 @@
             registerBackgroundWorkers();
             initMenu()
             switchCards("#settings")
-            /*
+
             var myCallback=function(){
                 var hours=localStorage.getItem(LOGLIST_START_HOURS);
                 var pageSize=localStorage.getItem(LOGLIST_PAGE_SIZE);
@@ -30,8 +32,8 @@
                 fillCareLevelSelect();
                 chooseEventAndStationOnLogEntryPage();
 
-                fillEventList()
-                var eventId=getCurrentEventId()
+                fillEventList();
+                var eventId=getCurrentEventId();
 
                 $("#eventlist").val(eventId)
                 $("#eventlist").change();
@@ -39,12 +41,12 @@
 
             };
             fetchListData(myCallback);
-            fetchGiftItems();
-            buildGiftTable();
+            //fetchGiftItems();
+            //buildGiftTable();
 
             $("#currentUser").text(localStorage.getItem(CURRENT_USERID))
 
-             */
+
 
         });
 
@@ -54,7 +56,10 @@
 <div class="top">
     <div class="title">
         <img class="menulogo" src="images/logo.png">
-        <span id="currentUser">Bob</span>
+        <br>
+        <span id="currentUser" ></span>
+        <br>
+        <span id="eventName" ></span>
     </div>
     <div class="menu" id="menu">
         <table>
@@ -167,13 +172,6 @@
                 <input id="id" name="id" type="hidden" value="0">
                 <table class="entry-form">
                     <tr>
-                        <th>Event:</th>
-                        <td>
-                    <span id="eventname" name="eventname">
-                    </span>
-                        </td>
-                    </tr>
-                    <tr>
                         <th>Unit/Station:</th>
                         <td>
                             <select id="logentryunit" name="logentryunit">
@@ -202,18 +200,16 @@
                         <td>
                     <span>
                         <input id="ptage" name="ptage" type="number"/>
-                        <input id="ageAsMonths" type="checkbox" value="yes"> Months
+                        <input id="ageAsMonths" type="checkbox" value="yes" class="entry-form"> Months
                     </span>
                         </td>
                     </tr>
                     <tr>
-                        <th>Medical Gender:</th>
+                        <th>Birth Gender:</th>
                         <td>
                             <select id="ptsex" name="ptsex">
                                 <option value="female">Female</option>
                                 <option value="male">Male</option>
-                                <option value="tfemale">Trans Gender Female</option>
-                                <option value="tmale">Trans Gender Male</option>
                                 <option value="none">Not identified</option>
                             </select>
                         </td>

@@ -5,6 +5,7 @@ function fillEventList() {
         el.append($('<option>', {value:key, text:value}));
     }
 }
+
 function onEventChange(item) {
     var eventId=item.value;  //$("#eventlist").val()
     localStorage.setItem(EVENT_ID,eventId);
@@ -25,6 +26,7 @@ function onEventChange(item) {
     }
     unitSel.val(unitToSelect)
     localStorage.setItem(UNIT_ID,unitToSelect)
+    $("#eventName").text(eventMap[eventId])
     clearLocalGiftedSupplies()
     fetchGiftItems()
 

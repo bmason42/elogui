@@ -8,6 +8,7 @@ var LOGLIST_START_HOURS = "loglist.start.hours";
 var LOGLIST_PAGE_SIZE = "loglist.page.size";
 var EVENT_ID="elog.event.id"
 var CURRENT_USERID = "elog.user.id"
+var AUTH_TOKEN = "elog.auth.token"
 var UNIT_ID="elog.station.id"
 var TO_SAVE_ID_LIST="elog.tosave.list"
 var SAVED_RECORD_PREFIX="elog.record."
@@ -15,7 +16,7 @@ var SAVED_GIFT_PREFIX="elog.gifted."  //prefix for count of gifts
 var GIFT_ID_LIST="elog.gifted.id"
 
 /**************** Globals  *****************/
-var baseURL="/api/"
+var baseURL="/elog/v2/"
 var ccMap=[];
 var eventMap=[];
 var unitMap=[];
@@ -29,6 +30,7 @@ function turnOnwait(){
 function turnOffWait(){
     $('body').removeClass('waiting');
 }
+
 
 function getQueryStrings() {
     var assoc  = {};
@@ -271,11 +273,16 @@ function fetchRemoteRecord(id) {
         loadRecordInfoUI(data);
     });
 }
-
+function addHeaders(xhr) {
+    var token=localStorage.getItem(AUTH_TOKEN);
+    xhr.setRequestHeader('x-auth', token);
+}
 function fetchListData(callback) {
+
     var ajax = $.ajax({
-        url: baseURL +"choicelists",
-        cache:true,
+        url: baseURL +"choicelists/",
+        cache:false,
+        beforeSend: addHeaders,
     });
     ajax.then(function (data) {
         try {
@@ -294,8 +301,10 @@ function fetchListData(callback) {
                 careLevelMap[data.carelevels[i].id]=data.carelevels[i].label;
             }
             for (var i=0;i<data.events.length;i++){
-                eventMap[data.events[i].id]=data.events[i].label;
-                unitMap[data.events[i].id]=data.events[i].units;
+                eventMap[data.events[i].eventID]=data.events[i].label;
+                let unitsString = data.events[i].units;
+                let units=unitsString.split("|")
+                unitMap[data.events[i].eventID]= units;
             }
 
         } catch (oops) {
