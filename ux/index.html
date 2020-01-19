@@ -18,11 +18,11 @@
             initMenu()
             switchCards("#settings")
 
-            var myCallback=function(){
-                var hours=localStorage.getItem(LOGLIST_START_HOURS);
-                var pageSize=localStorage.getItem(LOGLIST_PAGE_SIZE);
-                hours = hours == null? 1 : hours
-                pageSize=pageSize== null ? 100 : pageSize;
+            var myCallback = function () {
+                var hours = localStorage.getItem(LOGLIST_START_HOURS);
+                var pageSize = localStorage.getItem(LOGLIST_PAGE_SIZE);
+                hours = hours == null ? 1 : hours
+                pageSize = pageSize == null ? 100 : pageSize;
                 $("#startTimeInput").val(hours);
                 $("#pageSizeInput").val(pageSize);
 
@@ -33,7 +33,7 @@
                 chooseEventAndStationOnLogEntryPage();
 
                 fillEventList();
-                var eventId=getCurrentEventId();
+                var eventId = getCurrentEventId();
 
                 $("#eventlist").val(eventId)
                 $("#eventlist").change();
@@ -47,7 +47,6 @@
             $("#currentUser").text(localStorage.getItem(CURRENT_USERID))
 
 
-
         });
 
     </script>
@@ -57,9 +56,9 @@
     <div class="title">
         <img class="menulogo" src="images/logo.png">
         <br>
-        <span id="currentUser" ></span>
+        <span id="currentUser"></span>
         <br>
-        <span id="eventName" ></span>
+        <span id="eventName"></span>
     </div>
     <div class="menu" id="menu">
         <table>
@@ -143,7 +142,6 @@
             </div>
         </form>
     </div>
-
     <div class="content" id="log">
         <form>
             <span class="button-menus">
@@ -162,108 +160,104 @@
             </table>
         </div>
     </div>
-
     <div class="content" id="entry">
-        <form>
+        <div class="tablediv">
 
+            <input id="id" name="id" type="hidden" value="0">
+            <table class="entry-form">
+                <tr>
+                    <th>Unit/Station:</th>
+                    <td>
+                        <select id="logentryunit" name="logentryunit">
+                        </select>
 
-            <div class="tablediv">
-
-                <input id="id" name="id" type="hidden" value="0">
-                <table class="entry-form">
-                    <tr>
-                        <th>Unit/Station:</th>
-                        <td>
-                            <select id="logentryunit" name="logentryunit">
-                            </select>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Dispatch / Arrival:</th>
-                        <td><input id="arrival" type="datetime-local"></td>
-                    </tr>
-                    <tr>
-                        <th>Available / Released:</th>
-                        <td><input id="released" type="datetime-local"></td>
-                    </tr>
-                    <tr>
-                        <th>PT Name:</th>
-                        <td><input id="ptname" name="ptname"/></td>
-                    </tr>
-                    <tr>
-                        <th>PT Camp:</th>
-                        <td><input id="ptcamp" name="ptcamp" type="text"/></td>
-                    </tr>
-                    <tr>
-                        <th>PT Age:</th>
-                        <td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Dispatch / Arrival:</th>
+                    <td><input id="arrival" type="datetime-local"></td>
+                </tr>
+                <tr>
+                    <th>Available / Released:</th>
+                    <td><input id="released" type="datetime-local"></td>
+                </tr>
+                <tr>
+                    <th>PT Name:</th>
+                    <td><input id="ptname" name="ptname"/></td>
+                </tr>
+                <tr>
+                    <th>PT Camp:</th>
+                    <td><input id="ptcamp" name="ptcamp" type="text"/></td>
+                </tr>
+                <tr>
+                    <th>PT Age:</th>
+                    <td>
                     <span>
                         <input id="ptage" name="ptage" type="number"/>
                         <input id="ageAsMonths" type="checkbox" value="yes" class="entry-form"> Months
                     </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Birth Gender:</th>
-                        <td>
-                            <select id="ptsex" name="ptsex">
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                                <option value="none">Not identified</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Incident Location</th>
-                        <td>
-                            <input id="location" name="location" type="localtion"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Arm Band/PCR</th>
-                        <td>
-                            <input id="tracking" name="tracking"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Chief Complaint:</th>
-                        <td>
-                            <select id="cc" name="cc">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Treatment:</th>
-                        <td>
-                            <select id="tx" name="tx">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Disposition:</th>
-                        <td>
-                            <select id="disp" name="disp">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Provider:</th>
-                        <td><input id="provider" name="provider" type="text"/></td>
-                    </tr>
-                    <tr>
-                        <th>Care Level:</th>
-                        <td>
-                            <select id="carelevel" name="carelevel">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Notes:</th>
-                        <td><textarea id="notes" id="notes" name="notes" rows="3"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Birth Gender:</th>
+                    <td>
+                        <select id="ptsex" name="ptsex">
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="none">Not identified</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Incident Location</th>
+                    <td>
+                        <input id="location" name="location" type="localtion"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Arm Band/PCR</th>
+                    <td>
+                        <input id="tracking" name="tracking"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Chief Complaint:</th>
+                    <td>
+                        <select id="cc" name="cc">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Treatment:</th>
+                    <td>
+                        <select id="tx" name="tx">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Disposition:</th>
+                    <td>
+                        <select id="disp" name="disp">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Provider:</th>
+                    <td><input id="provider" name="provider" type="text"/></td>
+                </tr>
+                <tr>
+                    <th>Care Level:</th>
+                    <td>
+                        <select id="carelevel" name="carelevel">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Notes:</th>
+                    <td><textarea id="notes" name="notes" rows="3"></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
                 <span class="buttonbox">
                     <input class="form" id="savebutton" onclick="saveLogEntryData(false)" type="button" value="Save">
                     <input class="form" id="doneButton" onclick="saveLogEntryData(true)" type="button" value="Done">
@@ -271,50 +265,60 @@
                     <span id="savestatus"></span>
                 </span>
 
-                        </td>
+                    </td>
 
-                    </tr>
-                </table>
-            </div>
-        </form>
+                </tr>
+            </table>
+        </div>
     </div>
     <div class="content" id="pcr">
         <div class="tablediv">
             <table class="entry-form">
                 <tr>
-                    <td>Tracking :</td>
-                    <td><input id="pcr_tracking_search" type="text"></td>
+                    <th>Tracking :</th>
+                    <td><input class="shortentry" id="pcr_tracking_search" type="text"></td>
                 </tr>
                 <tr>
-                    <td>History:</td>
-                    <td><input id="pcr_history" type="text"></td>
+                    <th>History:</th>
+                    <td><input class="detailentry" id="pcr_history" type="text"></td>
                 </tr>
                 <tr>
-                    <td>Medications :</td>
-                    <td><input id="pcr_medications" type="text"></td>
+                    <th>Meds :</th>
+                    <td><input class="detailentry" id="pcr_medications" type="text"></td>
                 </tr>
                 <tr>
-                    <td>Allergies :</td>
-                    <td><input id="pcr_allergies" type="text"></td>
+                    <th>Allergies :</th>
+                    <td><input class="detailentry" id="pcr_allergies" type="text"></td>
                 </tr>
             </table>
         </div>
         <div>
             <table class="entry-form">
                 <tr>
-                    <td>Actions</td>
-                    <td><input type="button" value="Add Vitals"></td>
-                    <td><input type="button" value="Add Intervention"></td>
+                    <th>Actions</th>
+                    <td>
+                        <span>
+                            <input type="button" value="Add Vitals" onclick="addPcrActionsRow(PCR_ACTION_VITALS)">
+                            <input type="button" value="Add Treatment" onclick="addPcrActionsRow(PCR_ACTION_TX)">
+                        </span>
+                    </td>
                 </tr>
             </table>
-            <table class="pcr-interventions">
+            <table id="pcrActionsTable" class="pcr-actions">
+                <tbody id="pcrActions">
                 <tr>
                     <th>Time</th>
                     <th>Type</th>
                     <th>Description</th>
                     <th>Provider</th>
                 </tr>
+                </tbody>
             </table>
+            <span>Notes</span>
+            <br>
+            <span class="pcrNotes">
+                <textarea  style="width: 100%" id="pcrnotes" name="pcrnotes" rows="3"></textarea>
+            </span>
         </div>
 
     </div>

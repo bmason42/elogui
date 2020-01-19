@@ -155,40 +155,60 @@ table.entry-form{
 }
 table.entry-form tr{
     background-color: var(--main-color);
+    width: 100%;
 }
 table.entry-form th{
     text-align: right;
     padding:6px;
     font-size: 10pt;
     font-weight: bold;
+    white-space: nowrap;
     margin: 10px;
 }
 table.entry-form td{
     padding:6px;
     margin: 10px;
+    horiz-align: left;
+    width: 100%;
     font-size: 10pt;
+}
+table.entry-form input.detailentry{
+    width: 75%;
+}
+table.entry-form input.shortentry{
 }
 input.entry-form{
     font-size: 10pt;
 }
 
 
-table.pcr-interventions{
+table.pcr-actions{
     width: 100%;
 }
-table.pcr-interventions tr{
+table.pcr-actions tr{
     background-color: var(--main-color);
+    width: 100%;
 }
-table.pcr-interventions th{
-    text-align: right;
+table.pcr-actions th{
+    text-align: center;
     padding:6px;
     margin: 10px;
 }
-table.pcr-interventions td{
+table.pcr-actions td{
     padding:6px;
     margin: 10px;
+    text-align: center;
+}
+table.pcr-actions input{
+    width: 100%;
+}
+.pcr-actions-description{
+    width: 50%;
 }
 
+span.pcrNotes{
+    width: 95%;
+}
 
 span.ptname{
     padding-left: 10px;

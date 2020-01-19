@@ -14,7 +14,8 @@ var TO_SAVE_ID_LIST="elog.tosave.list"
 var SAVED_RECORD_PREFIX="elog.record."
 var SAVED_GIFT_PREFIX="elog.gifted."  //prefix for count of gifts
 var GIFT_ID_LIST="elog.gifted.id"
-
+var PCR_ACTION_VITALS="vitals"
+var PCR_ACTION_TX="tx"
 /**************** Globals  *****************/
 var baseURL="/elog/v2/"
 var ccMap=[];
@@ -492,6 +493,19 @@ function addGiftRow( data) {
     markup +="<td><span id='supplyvalue" +id +"'>"  +data.count + "</span></td>"
     markup += "<td><input type='button' class='incrementbutton' value='" + label + " Increment' onclick='doGiftIncrement(" + id + ")'></td>";
     var $loglist = $("#giftedsupplies");
+    $loglist.append(markup);
+}
+
+function addPcrActionsRow(actionType) {
+    var markup = "<tr>" ;
+    var timestamp=new Date()
+    var dstr=mkFormattedDateForInputField(timestamp);
+    markup +="<td><input type='datetime-local' value='"  +dstr + "'> </input></td>"
+    markup +="<td>" + actionType + "</td>"
+    markup += "<td  class='pcr-actions-description'><input type='text'></td>";
+    markup += "<td><input type='text'></td>";
+    markup +="</tr>"
+    var $loglist = $("#pcrActions");
     $loglist.append(markup);
 }
 
