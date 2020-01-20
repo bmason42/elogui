@@ -399,7 +399,7 @@ function dologout() {
         dataType: "text"
     }).then(function (newOb) {
         //this cache name is defined in servicework.js
-        caches.delete("elogapp-v1");
+        caches.delete("elogapp-v2");
         turnOffWait()
         window.open("login.html", '_self', false)
     });
@@ -414,7 +414,7 @@ function registerBackgroundWorkers(){
 function registerServiceWorker(){
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-            .register('/serviceworker.js')
+            .register('/sw.js')
             .then(function() { console.log('Service Worker Registered'); });
     }else{
         console.log("No Service Worker, no off line mode")

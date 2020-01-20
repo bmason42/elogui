@@ -1,9 +1,13 @@
+
+//version for reload control
+const ELOG_SW_VERSION="2.0.1"
+
 //careful this name is also in doLogout in main.js
 var cacheName = 'elogapp-v2';
 var filesToCache = [
-    "/",
     "/index.html",
     "/main.css",
+    "/login.html",
 
     //images
     "/images/esd-logo.png",
@@ -20,21 +24,22 @@ var filesToCache = [
     "/images/report-icon.png",
     "/images/settings.png",
     "/images/sync.png",
+    "/favicon.ico",
 
     //scripts
+    "/sw.js",
+    "/manifest.json",
     "/scripts/jquery.js",
     "/scripts/logentry.js",
     "/scripts/main.js",
-    "/scripts/manifest.json",
     "/scripts/menu.js",
-    "/scripts/serviceworker.js",
     "/scripts/settings.js",
     "/scripts/ww.js"
 
 ];
 
 self.addEventListener('install', function(e) {
-    console.log('[SeviceWorker] Installing');
+    console.log('Service Worker Installing');
     e.waitUntil(
         caches.open(cacheName).then(function(cache) {
             var promise
@@ -46,8 +51,10 @@ self.addEventListener('install', function(e) {
             return promise;
         })
     );
-    console.log('[ServiceWorker] Install');
+    console.log('ServiceWorker Install');
+
 });
+
 self.addEventListener('fetch', function(event) {
     console.log("Cache Request: " + event.request );
     var page=caches.match(event.request).then(function(response) {
@@ -60,4 +67,9 @@ self.addEventListener('fetch', function(event) {
     )
 
     event.respondWith(page);
+});
+
+
+self.addEventListener('activate', function (event) {
+    console.log('** '+ ELOG_SW_VERSION + ' is Activated');
 });

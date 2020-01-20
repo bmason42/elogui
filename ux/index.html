@@ -4,13 +4,18 @@
     <title>PT Log</title>
 
     <link href="main.css" rel="stylesheet">
-    <link href="scripts/manifest.json" rel="manifest">
+    <link href="manifest.json" rel="manifest">
     <script src="scripts/jquery.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/menu.js"></script>
     <script src="scripts/settings.js"></script>
     <script src="scripts/logentry.js"></script>
     <script>
+
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW registered!', reg))
+            .catch(err => console.log('SW Registration Error: ', err));
+
 
         $(document).ready(function () {
             $(document).ajaxError(errorHandler);
