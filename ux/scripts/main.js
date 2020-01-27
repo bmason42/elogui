@@ -422,14 +422,15 @@ function dologout() {
 
 /****************** B A C K  G R O U N D   S T U F F **************************************/
 function registerBackgroundWorkers(){
-    //registerRecordSaveHandler()
-    //registerServiceWorker()
+    registerRecordSaveHandler()
+    registerServiceWorker()
 }
 function registerServiceWorker(){
+
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js')
-            .then(function() { console.log('Service Worker Registered'); });
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW registered!', reg))
+            .catch(err => console.log('SW Registration Error: ', err));
     }else{
         console.log("No Service Worker, no off line mode")
     }
@@ -439,7 +440,7 @@ Registers the Web Worker callback handler
  */
 function registerRecordSaveHandler() {
     if (typeof (w) == "undefined") {
-        w = new Worker("ww.js");
+        w = new Worker("/scripts/ww.js");
         w.onmessage = handleSaveCallback;
     }
 }
@@ -449,6 +450,9 @@ Called from the web worker to save data to the server
 function handleSaveCallback(event){
     console.log("Save Callback")
     var ids = fetchListOfLocalRecordIds();
+    console.log(ids);
+    console.log(event)
+    /*
     for (var i=0;i<ids.length;i++){
         var json = localStorage.getItem(SAVED_RECORD_PREFIX + ids[i]);
         sendLogRecordToServer(json)
@@ -459,6 +463,8 @@ function handleSaveCallback(event){
 
         doIncrementOnRemoteServer(giftId)
     }
+
+     */
 }
 function sendLogRecordToServer(json) {
     $.ajax({

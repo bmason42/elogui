@@ -1,5 +1,5 @@
 function backgroundSaveTask() {
-    postMessage("")
+    postMessage("save")
     setTimeout("backgroundSaveTask()",10000);
 }
 backgroundSaveTask()
