@@ -9,6 +9,7 @@ function initMenu(){
     $("#entrymenu").click(function() {
         switchCards("#entry")
         //chooseEventAndStationOnLogEntryPage()
+        clearForm()
     });
     $("#giftsmenu").click(function() {
         switchCards("#gift")

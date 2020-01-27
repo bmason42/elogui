@@ -8,6 +8,7 @@ var filesToCache = [
     "/index.html",
     "/main.css",
     "/login.html",
+    "/",
 
     //images
     "/images/esd-logo.png",
@@ -29,12 +30,16 @@ var filesToCache = [
     //scripts
     "/sw.js",
     "/manifest.json",
-    "/scripts/jquery.js",
+    "/scripts/jquery.min.js",
     "/scripts/logentry.js",
     "/scripts/main.js",
     "/scripts/menu.js",
     "/scripts/settings.js",
-    "/scripts/ww.js"
+    "/scripts/ww.js",
+
+    //api
+    //"/elog/v2/choicelists/"
+
 
 ];
 
@@ -56,12 +61,13 @@ self.addEventListener('install', function(e) {
 });
 
 self.addEventListener('fetch', function(event) {
-    console.log("Cache Request: " + event.request );
+    console.log("Cache Request: " + event.request.url );
     var page=caches.match(event.request).then(function(response) {
             // Cache hit - return response
             if (response) {
                 return response;
             }
+            console.log("Cache Miss " + event.request.url)
             return fetch(event.request);
         }
     )

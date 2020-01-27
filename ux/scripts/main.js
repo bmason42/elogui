@@ -9,6 +9,7 @@ var LOGLIST_PAGE_SIZE = "loglist.page.size";
 var EVENT_ID="elog.event.id"
 var CURRENT_USERID = "elog.user.id"
 var AUTH_TOKEN = "elog.auth.token"
+var LIST_DATA="elog.list.data"
 var UNIT_ID="elog.station.id"
 var TO_SAVE_ID_LIST="elog.tosave.list"
 var SAVED_RECORD_PREFIX="elog.record."
@@ -278,41 +279,54 @@ function addHeaders(xhr) {
     var token=localStorage.getItem(AUTH_TOKEN);
     xhr.setRequestHeader('x-auth', token);
 }
-function fetchListData(callback) {
 
-    var ajax = $.ajax({
-        url: baseURL +"choicelists/",
-        cache:false,
-        beforeSend: addHeaders,
-    });
-    ajax.then(function (data) {
-        try {
-            for (var i = 0; i < data.ccs.length; i++) {
-                ccMap[data.ccs[i].id]=data.ccs[i].label;
-            }
-            for (var i = 0; i < data.dispos.length; i++) {
-
-                dispMap[data.dispos[i].id]=data.dispos[i].label;
-            }
-            for (var i = 0; i < data.txs.length; i++) {
-
-                txMap[data.txs[i].id]=data.txs[i].label;
-            }
-            for (var i=0;i<data.carelevels.length;i++){
-                careLevelMap[data.carelevels[i].id]=data.carelevels[i].label;
-            }
-            for (var i=0;i<data.events.length;i++){
-                eventMap[data.events[i].eventID]=data.events[i].label;
-                let unitsString = data.events[i].units;
-                let units=unitsString.split("|")
-                unitMap[data.events[i].eventID]= units;
-            }
-
-        } catch (oops) {
-            handleError(oops);
+function processListData(data) {
+    try {
+        for (var i = 0; i < data.ccs.length; i++) {
+            ccMap[data.ccs[i].id] = data.ccs[i].label;
         }
-        callback();
-    });
+        for (var i = 0; i < data.dispos.length; i++) {
+
+            dispMap[data.dispos[i].id] = data.dispos[i].label;
+        }
+        for (var i = 0; i < data.txs.length; i++) {
+
+            txMap[data.txs[i].id] = data.txs[i].label;
+        }
+        for (var i = 0; i < data.carelevels.length; i++) {
+            careLevelMap[data.carelevels[i].id] = data.carelevels[i].label;
+        }
+        for (var i = 0; i < data.events.length; i++) {
+            eventMap[data.events[i].eventID] = data.events[i].label;
+            let unitsString = data.events[i].units;
+            let units = unitsString.split("|")
+            unitMap[data.events[i].eventID] = units;
+        }
+
+    } catch (oops) {
+        handleError(oops);
+    }
+}
+
+function fetchListData(callback) {
+    let storedJSON = localStorage.getItem(LIST_DATA);
+    if (storedJSON != null){
+        var data=JSON.parse(storedJSON)
+        processListData(data)
+        callback()
+    }else {
+        var ajax = $.ajax({
+            url: baseURL + "choicelists/",
+            cache: true,
+            beforeSend: addHeaders,
+        });
+        ajax.then(function (data) {
+            processListData(data);
+            var jsondata=JSON.stringify(data)
+            localStorage.setItem(LIST_DATA,jsondata)
+            callback();
+        });
+    }
 }
 
 function handleError(error){

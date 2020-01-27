@@ -75,7 +75,6 @@ function saveLogEntryData(done) {
     data.locked = false;  // change to = done when locking is working right
     var json = JSON.stringify(data);
     var idList = fetchListOfLocalRecordIds()
-    var tmpname=data.ptName
     //keep these two
     localStorage.setItem(SAVED_RECORD_PREFIX + data.id, json)
     if (!doesArrayContains(idList, data.id)) {
