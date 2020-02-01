@@ -166,7 +166,8 @@
     <div class="content" id="entry">
         <div class="tablediv">
 
-            <input id="id" name="id" type="hidden" value="0">
+            <input id="logID" name="logID" type="hidden" value="0">
+            <input id="patientID" name="patientID" type="hidden" value="0">
             <table class="entry-form">
                 <tr>
                     <th>Unit/Station:</th>
@@ -185,9 +186,14 @@
                     <td><input id="released" type="datetime-local"></td>
                 </tr>
                 <tr>
-                    <th>PT Name:</th>
-                    <td><input id="ptname" name="ptname"/></td>
+                    <th>PT First Name:</th>
+                    <td><input id="ptFirstName" name="ptname"/></td>
                 </tr>
+                <tr>
+                    <th>PT Last Name:</th>
+                    <td><input id="ptLastName" name="ptname"/></td>
+                </tr>
+
                 <tr>
                     <th>PT Camp:</th>
                     <td><input id="ptcamp" name="ptcamp" type="text"/></td>

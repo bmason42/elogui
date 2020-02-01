@@ -4,21 +4,21 @@
 //var baseURL="https://ihhzfv6xle.execute-api.us-west-2.amazonaws.com/dev/"
 
 /********* CONSTANTS ****************/
-var LOGLIST_START_HOURS = "loglist.start.hours";
-var LOGLIST_PAGE_SIZE = "loglist.page.size";
-var EVENT_ID="elog.event.id"
-var CURRENT_USERID = "elog.user.id"
-var AUTH_TOKEN = "elog.auth.token"
-var LIST_DATA="elog.list.data"
-var UNIT_ID="elog.station.id"
-var TO_SAVE_ID_LIST="elog.tosave.list"
-var SAVED_RECORD_PREFIX="elog.record."
-var SAVED_GIFT_PREFIX="elog.gifted."  //prefix for count of gifts
-var GIFT_ID_LIST="elog.gifted.id"
-var PCR_ACTION_VITALS="vitals"
-var PCR_ACTION_TX="tx"
+const LOGLIST_START_HOURS = "loglist.start.hours";
+const LOGLIST_PAGE_SIZE = "loglist.page.size";
+const EVENT_ID="elog.event.id"
+const CURRENT_USERID = "elog.user.id"
+const AUTH_TOKEN = "elog.auth.token"
+const LIST_DATA="elog.list.data"
+const UNIT_ID="elog.station.id"
+const TO_SAVE_ID_LIST="elog.tosave.list"
+const SAVED_RECORD_PREFIX="elog.record."
+const SAVED_GIFT_PREFIX="elog.gifted."  //prefix for count of gifts
+const GIFT_ID_LIST="elog.gifted.id"
+const PCR_ACTION_VITALS="vitals"
+const PCR_ACTION_TX="tx"
 /**************** Globals  *****************/
-var baseURL="/elog/v2/"
+const baseURL="/elog/v2/"
 var ccMap=[];
 var eventMap=[];
 var unitMap=[];
@@ -89,12 +89,13 @@ function fetchRecords() {
 
 
     $.ajax({
-        url: baseURL + "logsummary/"+eventId+"?hours="+hours + "&count="+pageSize
+        url: baseURL + "logsummary/"+eventId+"?hours="+hours + "&count="+pageSize,
+        beforeSend: addHeaders
     }).then(function (data) {
         for (var i = 0; i < data.length; i++) {
             try {
                 if (!doesArrayContains(listOfIds,data[i].id)) {
-                    addLogEntryRow(data[i].id, data[i].name, data[i].arrival, data[i].cc, data[i].disp, data[i].locked, data[i].replicated, false);
+                    addLogEntryRow(data[i].logID, "HIPA", data[i].arrival, data[i].cc, data[i].disp, data[i].locked, data[i].replicated, false);
                 }
             } catch (oops) {
                 alert(oops);
@@ -234,43 +235,13 @@ function clearLogForm() {
     $("#provider").val("")
     $("#notes").val("")
 }
-function loadRecordInfoUI(data) {
 
-
-    $("#id").val(data.id);
-    var d = new Date(data.arrival);
-    setArrivalFields(d)
-    d = new Date(data.released);
-    setReleasedField(d);
-    $("#ptname").val(data.ptName);
-    $("#ptcamp").val(data.ptCamp);
-    if (data.ptAge > 0) {
-        $("#ptage").val(data.ptAge);
-        $("#ageAsMonths").prop("checked", false);
-    } else {
-        var months = data.ptAge * -1
-        $("#ageAsMonths").prop("checked", true);
-        $("#ptage").val(months);
-    }
-    $("#ptsex").val(data.ptGender)
-    $("#cc").val(data.cc)
-    $("#tracking").val(data.tracking)
-    $("#disp").val(data.disp)
-    $("#tx").val(data.tx)
-    $("#unit").val(data.unit)
-    $("#provider").val(data.provider)
-    $("#notes").val(data.notes)
-    $("#location").val(data.location)
-    $("#carelevel").val(data.carelevel)
-
-    var eventName = eventMap[data.event]
-    $("#eventname").html(eventName);
-}
 
 function fetchRemoteRecord(id) {
 
     $.ajax({
-        url: baseURL +"logentry/" + id
+        url: baseURL +"logentry/" + id,
+        beforeSend: addHeaders,
     }).then(function (data) {
         loadRecordInfoUI(data);
     });
@@ -452,24 +423,27 @@ function handleSaveCallback(event){
     var ids = fetchListOfLocalRecordIds();
     console.log(ids);
     console.log(event)
-    /*
+
     for (var i=0;i<ids.length;i++){
         var json = localStorage.getItem(SAVED_RECORD_PREFIX + ids[i]);
         sendLogRecordToServer(json)
     }
+    /*
     var giftIds=fetchGiftedSupplyIdList();
     for (var i=0;i<giftIds.length;i++){
         var giftId = giftIds[i];
 
         doIncrementOnRemoteServer(giftId)
     }
+    */
 
-     */
+
 }
 function sendLogRecordToServer(json) {
     $.ajax({
         type: 'POST',
-        url: "/api/logentry",
+        url: baseURL + "logs",
+        beforeSend: addHeaders,
         contentType: "application/json",
         processData: false,
         data: json,
@@ -479,7 +453,7 @@ function sendLogRecordToServer(json) {
         var ids = fetchListOfLocalRecordIds();
         var newids=[];
         for (var i=0;i<ids.length;i++){
-            if (ids[i] != entry.id){
+            if (ids[i] != entry.logEntry.logID){
                 newids.push(ids[i])
             }
         }
