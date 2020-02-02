@@ -76,14 +76,14 @@ function saveLogEntryData(done) {
     data.patientInfo.ptGender = $("#ptsex").val();
     data.logEntry.disp = parseInt($("#disp").val(),10);
     data.logEntry.cc = parseInt($("#cc").val(),10);
-    data.logEntry.tracking = $("#tracking").val();
+    data.logEntry.trackingID = $("#tracking").val();
     data.logEntry.provider = $("#provider").val();
     data.logEntry.notes = $("#notes").val();
     data.logEntry.unit = $("#unit").val();
     data.logEntry.tx = parseInt($("#tx").val(),10)
     data.logEntry.location = $("#location").val();
-    data.logEntry.carelevel = parseInt($("#carelevel").val(),10);
-    data.logEntry.event = parseInt(localStorage.getItem(EVENT_ID),10);
+    data.logEntry.careLevel = parseInt($("#carelevel").val(),10);
+    data.logEntry.eventID = parseInt(localStorage.getItem(EVENT_ID),10);
     data.logEntry.locked = false;  // change to = done when locking is working right
     let json = JSON.stringify(data);
     let idList = fetchListOfLocalRecordIds()
@@ -127,14 +127,14 @@ function loadRecordInfoUI(data) {
     }
     $("#ptsex").val(data.patientInfo.ptGender)
     $("#cc").val(data.logEntry.cc)
-    $("#tracking").val(data.logEntry.tracking)
+    $("#tracking").val(data.logEntry.trackingID)
     $("#disp").val(data.logEntry.disp)
     $("#tx").val(data.logEntry.tx)
     $("#unit").val(data.logEntry.unit)
     $("#provider").val(data.logEntry.provider)
     $("#notes").val(data.logEntry.notes)
     $("#location").val(data.logEntry.location)
-    $("#carelevel").val(data.logEntry.carelevel)
+    $("#carelevel").val(data.logEntry.careLevel)
 
     var eventName = eventMap[data.logEntry.eventId]
     $("#eventname").html(eventName);

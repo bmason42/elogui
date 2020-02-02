@@ -83,19 +83,19 @@ function fetchRecords() {
     var eventId=getCurrentEventId();
     var listOfIds = fetchListOfLocalRecordIds();
     for (var i=0;i<listOfIds.length;i++){
-        var data = fetchRecordFromLocalStorage(listOfIds[i]);
-        addLogEntryRow(data.id, data.ptName, data.arrival, data.cc, data.disp,data.locked,data.replicated,true);
+        let data = fetchRecordFromLocalStorage(listOfIds[i]);
+        addLogEntryRow(data,true);
     }
 
-
+    let unitId=localStorage.getItem(UNIT_ID);
     $.ajax({
-        url: baseURL + "logsummary/"+eventId+"?hours="+hours + "&count="+pageSize,
+        url: baseURL + "summary/"+eventId+"/"+unitId +"?hours="+hours + "&count="+pageSize,
         beforeSend: addHeaders
     }).then(function (data) {
         for (var i = 0; i < data.length; i++) {
             try {
-                if (!doesArrayContains(listOfIds,data[i].id)) {
-                    addLogEntryRow(data[i].logID, "HIPA", data[i].arrival, data[i].cc, data[i].disp, data[i].locked, data[i].replicated, false);
+                if (!doesArrayContains(listOfIds,data[i].logID)) {
+                    addLogEntryRow(data[i], false);
                 }
             } catch (oops) {
                 alert(oops);
@@ -104,26 +104,26 @@ function fetchRecords() {
         turnOffWait();
     });
 }
-function addLogEntryRow(id, ptname, arrival, cc, disp,locked,replicated,localsaved) {
-    var dateOb = new Date(arrival);
+function addLogEntryRow(data,localsaved) {
+    var dateOb = new Date(data.arrival);
     var dstr = mkFormattedDate(dateOb);
-    var ccLabel = ccMap[cc];
-    var dispLabel = dispMap[disp];
-    var markup = "<tr><td><a href='#' onclick='showSpecificLogEntry(\""+id + "\")' >"
+    var ccLabel = ccMap[data.cc];
+    var dispLabel = dispMap[data.disp];
+    var markup = "<tr><td><a href='#' onclick='showSpecificLogEntry(\""+data.logID + "\")' >"
     if (localsaved){
         markup += "<img width='16' height='16' src='localonly.png'>"
     }else {
-        if (replicated) {
+        if (data.replicated) {
             markup += "<img width='16' height='16' src='sync.png'>"
         } else {
             markup += "<img width='16' height='16' src='notsynced.png'>"
         }
     }
-    if (locked){
+    if (data.locked){
         markup+="<img width='16' height='16' src='lock-icon.png'>"
     }
     markup += "<span class='datetime'>" + dstr + " - </span><span class='cc'>" + ccLabel + "</span><br>"
-    markup += "<span class='ptname'> " + ptname + " - " + dispLabel + "</span></td><tr>";
+    markup += "<span class='ptname'> " + data.ptFirstName + " - " + dispLabel + "</span></td><tr>";
     var $loglist = $("#loglist > tbody");
     $loglist.append(markup);
 }
@@ -240,7 +240,7 @@ function clearLogForm() {
 function fetchRemoteRecord(id) {
 
     $.ajax({
-        url: baseURL +"logentry/" + id,
+        url: baseURL +"logs/" + id,
         beforeSend: addHeaders,
     }).then(function (data) {
         loadRecordInfoUI(data);
@@ -343,7 +343,7 @@ function padit(v,len) {
 function getCurrentEventId(){
     var eventId=localStorage.getItem(EVENT_ID);
     if (eventId == null || eventId.length ==0){
-        eventId="1";
+        eventId="0";
     }
     return eventId;
 }
