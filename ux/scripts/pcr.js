@@ -12,7 +12,14 @@ function addPcrActionsRow() {
 
 function launchPCR() {
     let data = saveLogEntryData(false)
+    $("#pcr_tracking").val(data.logEntry.trackingID);
+    $("#pcr_name").val(data.patientInfo.ptFirstName + " " +data.patientInfo.ptLastName );
+    $("#pcr_age").val(data.patientInfo.ptAge);
+    $("#pcr_gender").val(data.patientInfo.ptGender);
+    $("#pcrPtID").val(data.logEntry.ptID);
+
     switchCards("#pcr")
+    fetchPcrRecord(data.trackingID)
 }
 
 function savePCR() {
@@ -46,6 +53,9 @@ function savePCR() {
 }
 
 function loadPcrIntoUI(pcr) {
+    if (pcr == null){
+        return
+    }
     $("#pcr_tracking").val(pcr.trackingID);
     $("#pcrPtID").val(pcr.ptID);
     $("#pcr_incident_location").val(pcr.incidentLocation);
@@ -61,4 +71,28 @@ function loadPcrIntoUI(pcr) {
     $("#refusalSig").val(pcr.ptRefusalSignature);
     $("#refusalWitness").val(pcr.witnessName);
 
+}
+function fetchPcrFromLocalStorage(trackingID) {
+    var json = localStorage.getItem(SAVED_PCR_PREFIX + id);
+    var data = JSON.parse(json)
+    return data;
+}
+function fetchPcrRecord(trackingID){
+    var idList=fetchListOfLocalPcrIds()
+
+    if (doesArrayContains(idList,trackingID)) {
+        let data=fetchPcrFromLocalStorage(trackingID)
+        loadPcrIntoUI(data)
+    }else{
+        fetchRemotePcrRecord(trackingID)
+    }
+}
+function fetchRemotePcrRecord(trackingID) {
+
+    $.ajax({
+        url: baseURL +"pcr/" + trackingID,
+        beforeSend: addHeaders,
+    }).then(function (data) {
+        loadPcrIntoUI(data);
+    })
 }
