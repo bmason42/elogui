@@ -96,8 +96,8 @@ function saveLogEntryData(done) {
     var idjson = JSON.stringify(idList)
     localStorage.setItem(TO_SAVE_ID_LIST, idjson)
 
-    $("#logID").val(data.logEntry.logIDid);
-    $("#patientID").val(data.patientInfo.patientID);
+    $("#logID").val(data.logEntry.logID);
+    $("#patientID").val(data.patientInfo.ptID);
     let  tmp = mkFormattedDate(new Date());
     $("#savestatus").text("Saved " + tmp)
     if (done) {
@@ -107,7 +107,7 @@ function saveLogEntryData(done) {
 }
 function loadRecordInfoUI(data) {
     $("#logID").val(data.logEntry.logID);
-    $("#patientID").val(data.patientInfo.patientID);
+    $("#patientID").val(data.patientInfo.ptID);
     var d = new Date(data.logEntry.arrival);
     setArrivalFields(d)
     d = new Date(data.logEntry.released);

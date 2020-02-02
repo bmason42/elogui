@@ -84,7 +84,16 @@ function fetchRecords() {
     var listOfIds = fetchListOfLocalRecordIds();
     for (var i=0;i<listOfIds.length;i++){
         let data = fetchRecordFromLocalStorage(listOfIds[i]);
-        addLogEntryRow(data,true);
+        var summaryRecord=new Object()
+        summaryRecord.arrival=data.logEntry.arrival;
+        summaryRecord.replicated=data.logEntry.replicated;
+        summaryRecord.cc=data.logEntry.cc;
+        summaryRecord.disp=data.logEntry.disp;
+        summaryRecord.logID=data.logEntry.logID;
+        summaryRecord.locked=data.logEntry.locked;
+        summaryRecord.ptFirstName=data.patientInfo.ptFirstName;
+
+        addLogEntryRow(summaryRecord,true);
     }
 
     let unitId=localStorage.getItem(UNIT_ID);
@@ -104,26 +113,26 @@ function fetchRecords() {
         turnOffWait();
     });
 }
-function addLogEntryRow(data,localsaved) {
-    var dateOb = new Date(data.arrival);
+function addLogEntryRow(summaryRecord,localsaved) {
+    var dateOb = new Date(summaryRecord.arrival);
     var dstr = mkFormattedDate(dateOb);
-    var ccLabel = ccMap[data.cc];
-    var dispLabel = dispMap[data.disp];
-    var markup = "<tr><td><a href='#' onclick='showSpecificLogEntry(\""+data.logID + "\")' >"
+    var ccLabel = ccMap[summaryRecord.cc];
+    var dispLabel = dispMap[summaryRecord.disp];
+    var markup = "<tr><td><a href='#' onclick='showSpecificLogEntry(\""+summaryRecord.logID + "\")' >"
     if (localsaved){
-        markup += "<img width='16' height='16' src='localonly.png'>"
+        markup += "<img width='16' height='16' src='images/localonly.png'>"
     }else {
-        if (data.replicated) {
-            markup += "<img width='16' height='16' src='sync.png'>"
+        if (summaryRecord.replicated) {
+            markup += "<img width='16' height='16' src='images/sync.png'>"
         } else {
-            markup += "<img width='16' height='16' src='notsynced.png'>"
+            markup += "<img width='16' height='16' src='images/notsynced.png'>"
         }
     }
-    if (data.locked){
+    if (summaryRecord.locked){
         markup+="<img width='16' height='16' src='lock-icon.png'>"
     }
     markup += "<span class='datetime'>" + dstr + " - </span><span class='cc'>" + ccLabel + "</span><br>"
-    markup += "<span class='ptname'> " + data.ptFirstName + " - " + dispLabel + "</span></td><tr>";
+    markup += "<span class='ptname'> " + summaryRecord.ptFirstName + " - " + dispLabel + "</span></td><tr>";
     var $loglist = $("#loglist > tbody");
     $loglist.append(markup);
 }
