@@ -10,6 +10,7 @@
     <script src="scripts/menu.js"></script>
     <script src="scripts/settings.js"></script>
     <script src="scripts/logentry.js"></script>
+    <script src="scripts/pcr.js"></script>
     <script>
 
 
@@ -287,6 +288,7 @@
     </div>
     <div class="content" id="pcr">
         <div class="tablediv">
+            <input id="pcrPtID" name="pcrPtID" type="hidden" value="">
             <table class="entry-form">
                 <tr>
                    <td colspan="2">
@@ -311,6 +313,19 @@
                     <td><input class="shortentry" id="pcr_tracking" type="text" disabled></td>
                 </tr>
                 <tr>
+                    <th>Incident Time :</th>
+                    <td><input class="shortentry" id="pcr_incdent_time" type="datetime-local"></td>
+                </tr>
+                <tr>
+                    <th>Incident Location :</th>
+                    <td><input class="shortentry" id="pcr_incident_location" type="text" ></td>
+                </tr>
+                <tr>
+                    <th>Incident Description :</th>
+                    <td><input class="detailentry" id="pcr_incedent_desc" type="text" ></td>
+                </tr>
+
+                <tr>
                     <th>History:</th>
                     <td><input class="detailentry" id="pcr_history" type="text"></td>
                 </tr>
@@ -331,8 +346,7 @@
                     <td>
                         <span>
                             <input type="button" value="Save" onclick="savePCR()">
-                            <input type="button" value="Add Vitals" onclick="addPcrActionsRow(PCR_ACTION_VITALS)">
-                            <input type="button" value="Add Treatment" onclick="addPcrActionsRow(PCR_ACTION_TX)">
+                            <input type="button" value="Add Intervention" onclick="addPcrActionsRow()">
                         </span>
                     </td>
                 </tr>
@@ -341,7 +355,6 @@
                 <tbody id="pcrActions">
                 <tr>
                     <th>Time</th>
-                    <th>Type</th>
                     <th>Description</th>
                     <th>Provider</th>
                 </tr>

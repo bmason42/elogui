@@ -12,11 +12,11 @@ const AUTH_TOKEN = "elog.auth.token"
 const LIST_DATA="elog.list.data"
 const UNIT_ID="elog.station.id"
 const TO_SAVE_ID_LIST="elog.tosave.list"
+const TO_SAVE_PCR_ID_LIST="elog.pcrtosave.list"
 const SAVED_RECORD_PREFIX="elog.record."
+const SAVED_PCR_PREFIX="elog.pcr."
 const SAVED_GIFT_PREFIX="elog.gifted."  //prefix for count of gifts
 const GIFT_ID_LIST="elog.gifted.id"
-const PCR_ACTION_VITALS="vitals"
-const PCR_ACTION_TX="tx"
 /**************** Globals  *****************/
 const baseURL="/elog/v2/"
 var ccMap=[];
@@ -475,8 +475,8 @@ function fetchRecordFromLocalStorage(id) {
     var data = JSON.parse(json)
     return data;
 }
-function fetchListOfLocalRecordIds() {
-    var idjson = localStorage.getItem(TO_SAVE_ID_LIST)
+function loadListOfRecords(listID){
+    var idjson = localStorage.getItem(listID)
     var listOfIds;
     if ((idjson != null) && (idjson.length > 0)) {
         listOfIds = JSON.parse(idjson)
@@ -484,6 +484,12 @@ function fetchListOfLocalRecordIds() {
         listOfIds = [];
     }
     return listOfIds;
+}
+function fetchListOfLocalRecordIds() {
+    return loadListOfRecords(TO_SAVE_ID_LIST)
+}
+function fetchListOfLocalPcrIds() {
+    return loadListOfRecords(TO_SAVE_PCR_ID_LIST)
 }
 
 
@@ -499,12 +505,11 @@ function addGiftRow( data) {
     $loglist.append(markup);
 }
 
-function addPcrActionsRow(actionType) {
+function addPcrActionsRow() {
     var markup = "<tr>" ;
     var timestamp=new Date()
     var dstr=mkFormattedDateForInputField(timestamp);
     markup +="<td><input type='datetime-local' value='"  +dstr + "'> </input></td>"
-    markup +="<td>" + actionType + "</td>"
     markup += "<td  class='pcr-actions-description'><input type='text'></td>";
     markup += "<td><input type='text'></td>";
     markup +="</tr>"

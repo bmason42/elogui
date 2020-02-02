@@ -36,13 +36,6 @@ function clearForm() {
 function mkCopy() {
     $("#logID").val("")
 }
-function launchPCR(){
-    let data=saveLogEntryData(false)
-    switchCards("#pcr")
-}
-function savePCR() {
-
-}
 
 function saveLogEntryData(done) {
     turnOnwait();
