@@ -17,13 +17,13 @@ function clearForm() {
     var d = new Date();
     setArrivalFields(d);
     setReleasedField(d);
+    $("#tracking").val("")
     $("#ptFirstName").val("");
     $("#ptLastName").val("");
     $("#ptcamp").val("");
     $("#ptage").val("");
     $("#ptsex").val("")
     $("#cc").val(0)
-    $("#tracking").val("")
     $("#disp").val(0)
     $("#tx").val(0)
     $("#location").val("")
@@ -34,9 +34,15 @@ function clearForm() {
 
 
 function mkCopy() {
-    $("#id").val("")
+    $("#logID").val("")
 }
+function launchPCR(){
+    let data=saveLogEntryData(false)
+    switchCards("#pcr")
+}
+function savePCR() {
 
+}
 
 function saveLogEntryData(done) {
     turnOnwait();
@@ -76,7 +82,11 @@ function saveLogEntryData(done) {
     data.patientInfo.ptGender = $("#ptsex").val();
     data.logEntry.disp = parseInt($("#disp").val(),10);
     data.logEntry.cc = parseInt($("#cc").val(),10);
+
     data.logEntry.trackingID = $("#tracking").val();
+    if (data.logEntry.trackingID.length==0){
+        data.logEntry.trackingID=create_UUID()
+    }
     data.logEntry.provider = $("#provider").val();
     data.logEntry.notes = $("#notes").val();
     data.logEntry.unit = $("#unit").val();
@@ -98,12 +108,14 @@ function saveLogEntryData(done) {
 
     $("#logID").val(data.logEntry.logID);
     $("#patientID").val(data.patientInfo.ptID);
+    $("#tracking").val(data.logEntry.trackingID)
     let  tmp = mkFormattedDate(new Date());
     $("#savestatus").text("Saved " + tmp)
     if (done) {
         clearForm();
     }
     turnOffWait()
+    return data;
 }
 function loadRecordInfoUI(data) {
     $("#logID").val(data.logEntry.logID);
@@ -112,6 +124,7 @@ function loadRecordInfoUI(data) {
     setArrivalFields(d)
     d = new Date(data.logEntry.released);
     setReleasedField(d);
+
     $("#ptname").val(data.patientInfo.ptFirstName);
     $("#ptFirstName").val(data.patientInfo.ptFirstName);
     $("#ptLastName").val(data.patientInfo.ptLastName);

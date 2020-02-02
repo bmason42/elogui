@@ -178,6 +178,15 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>Tracking</th>
+                    <td>
+                        <span>
+                            <input id="tracking" name="tracking" />
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
                     <th>Dispatch / Arrival:</th>
                     <td><input id="arrival" type="datetime-local"></td>
                 </tr>
@@ -224,12 +233,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Arm Band/PCR</th>
-                    <td>
-                        <input id="tracking" name="tracking"/>
-                    </td>
-                </tr>
-                <tr>
                     <th>Chief Complaint:</th>
                     <td>
                         <select id="cc" name="cc">
@@ -265,14 +268,16 @@
                     <th>Notes:</th>
                     <td><textarea id="notes" name="notes" rows="3"></textarea></td>
                 </tr>
+
                 <tr>
                     <td colspan="2">
-                <span class="buttonbox">
-                    <input class="form" id="savebutton" onclick="saveLogEntryData(false)" type="button" value="Save">
-                    <input class="form" id="doneButton" onclick="saveLogEntryData(true)" type="button" value="Done">
-                    <input class="form" id="copyButton" onclick="mkCopy()" type="button" value="Copy">
-                    <span id="savestatus"></span>
-                </span>
+                        <span class="buttonbox">
+                            <input class="form" id="pcrbutton" onclick="launchPCR()" type="button" value="PCR">
+                            <input class="form" id="savebutton" onclick="saveLogEntryData(false)" type="button" value="Save">
+                            <input class="form" id="doneButton" onclick="saveLogEntryData(true)" type="button" value="Done">
+                            <input class="form" id="copyButton" onclick="mkCopy()" type="button" value="Copy">
+                            <span id="savestatus"></span>
+                        </span>
 
                     </td>
 
@@ -284,8 +289,26 @@
         <div class="tablediv">
             <table class="entry-form">
                 <tr>
+                   <td colspan="2">
+                       <input type="button" value="Back To Log Entry" onclick='switchCards("#entry")'>
+                   </td>
+                </tr>
+                <tr>
+                    <th>Name :</th>
+                    <td><input class="shortentry" id="pcr_name" type="text" disabled></td>
+                </tr>
+                <tr>
+                    <th>Age :</th>
+                    <td><input class="shortentry" id="pcr_age" type="text" disabled></td>
+                </tr>
+                <tr>
+                    <th>Gender At Birth :</th>
+                    <td><input class="shortentry" id="pcr_gender" type="text" disabled></td>
+                </tr>
+
+                <tr>
                     <th>Tracking :</th>
-                    <td><input class="shortentry" id="pcr_tracking_search" type="text"></td>
+                    <td><input class="shortentry" id="pcr_tracking" type="text" disabled></td>
                 </tr>
                 <tr>
                     <th>History:</th>
@@ -307,6 +330,7 @@
                     <th>Actions</th>
                     <td>
                         <span>
+                            <input type="button" value="Save" onclick="savePCR()">
                             <input type="button" value="Add Vitals" onclick="addPcrActionsRow(PCR_ACTION_VITALS)">
                             <input type="button" value="Add Treatment" onclick="addPcrActionsRow(PCR_ACTION_TX)">
                         </span>
@@ -328,6 +352,31 @@
             <span class="pcrNotes">
                 <textarea  style="width: 100%" id="pcrnotes" name="pcrnotes" rows="3"></textarea>
             </span>
+            <hr>
+            <table class="entry-form">
+                <tr>
+                    <td colspan="2">
+                        I understand that I am refusing care against advice.
+                        I further understand doing so may result in injury or death
+                        and I release the provider and event host from all liability
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        I understand the risk:
+                    </th>
+                    <td><input id="refuse" type="checkbox"></td>
+                </tr>
+                <tr>
+                    <th>Full name last 4 of SS:</th>
+                    <td><input id="refusalSig" type="text"></td>
+                </tr>
+                <tr>
+                    <th>Witness:</th>
+                    <td><input id="refusalWitness" type="text"></td>
+                </tr>
+
+            </table>
         </div>
 
     </div>
