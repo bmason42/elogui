@@ -23,6 +23,7 @@ function launchPCR() {
 }
 
 function savePCR() {
+    turnOnwait();
     let tzOffset = makeTZOffset();
     let pcr = new Object()
     pcr.trackingID = $("#pcr_tracking").val();
@@ -45,17 +46,27 @@ function savePCR() {
     //keep these two
     localStorage.setItem(SAVED_PCR_PREFIX + pcr.trackingID, json)
     if (!doesArrayContains(idList, pcr.trackingID)) {
-        idList.push(data.logEntry.logID)
+        idList.push(pcr.trackingID)
     }
 
     var idjson = JSON.stringify(idList)
     localStorage.setItem(TO_SAVE_PCR_ID_LIST, idjson)
+    turnOffWait()
 }
 
-function loadPcrIntoUI(pcr) {
+function loadPcrIntoUI(pcr,localonly) {
     if (pcr == null){
         return
     }
+    var imgSrc="imaages/localonly.png";
+    if (!localonly){
+        if (pcr.replicated){
+            imgSrc="imaages/sync.png";
+        }else {
+            imgSrc = "imaages/notsynced.png";
+        }
+    }
+    $("#pcrReplicated").attr("src",imgSrc);
     $("#pcr_tracking").val(pcr.trackingID);
     $("#pcrPtID").val(pcr.ptID);
     $("#pcr_incident_location").val(pcr.incidentLocation);
@@ -82,7 +93,7 @@ function fetchPcrRecord(trackingID){
 
     if (doesArrayContains(idList,trackingID)) {
         let data=fetchPcrFromLocalStorage(trackingID)
-        loadPcrIntoUI(data)
+        loadPcrIntoUI(data,true)
     }else{
         fetchRemotePcrRecord(trackingID)
     }
@@ -93,6 +104,6 @@ function fetchRemotePcrRecord(trackingID) {
         url: baseURL +"pcr/" + trackingID,
         beforeSend: addHeaders,
     }).then(function (data) {
-        loadPcrIntoUI(data);
+        loadPcrIntoUI(data,false);
     })
 }

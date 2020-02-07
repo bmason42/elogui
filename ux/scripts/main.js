@@ -430,13 +430,20 @@ Called from the web worker to save data to the server
 function handleSaveCallback(event){
     console.log("Save Callback")
     var ids = fetchListOfLocalRecordIds();
-    console.log(ids);
+    //console.log(ids);
     console.log(event)
 
     for (var i=0;i<ids.length;i++){
         var json = localStorage.getItem(SAVED_RECORD_PREFIX + ids[i]);
         sendLogRecordToServer(json)
     }
+
+    var pcrIds=fetchListOfLocalPcrIds()
+    for (var i=0;i<pcrIds.length;i++){
+        var json = localStorage.getItem(SAVED_PCR_PREFIX + pcrIds[i]);
+        sendPcrRecordToServer(json)
+    }
+
     /*
     var giftIds=fetchGiftedSupplyIdList();
     for (var i=0;i<giftIds.length;i++){
@@ -468,6 +475,28 @@ function sendLogRecordToServer(json) {
         }
         var idjson=JSON.stringify(newids)
         localStorage.setItem(TO_SAVE_ID_LIST,idjson)
+    });
+}
+function sendPcrRecordToServer(json){
+    $.ajax({
+        type: 'POST',
+        url: baseURL + "pcr",
+        beforeSend: addHeaders,
+        contentType: "application/json",
+        processData: false,
+        data: json,
+        dataType: "text"
+    }).done(function (newOb) {
+        var entry = JSON.parse(newOb)
+        var ids = fetchListOfLocalPcrIds();
+        var newids=[];
+        for (var i=0;i<ids.length;i++){
+            if (ids[i] != entry.trackingID){
+                newids.push(ids[i])
+            }
+        }
+        var idjson=JSON.stringify(newids)
+        localStorage.setItem(TO_SAVE_PCR_ID_LIST,idjson)
     });
 }
 function fetchRecordFromLocalStorage(id) {

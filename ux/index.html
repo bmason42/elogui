@@ -14,8 +14,6 @@
     <script>
 
 
-
-
         $(document).ready(function () {
             $(document).ajaxError(errorHandler);
             registerBackgroundWorkers();
@@ -176,7 +174,7 @@
                     <th>Tracking</th>
                     <td>
                         <span>
-                            <input id="tracking" name="tracking" />
+                            <input id="tracking" name="tracking"/>
                         </span>
                     </td>
                 </tr>
@@ -268,8 +266,10 @@
                     <td colspan="2">
                         <span class="buttonbox">
                             <input class="form" id="pcrbutton" onclick="launchPCR()" type="button" value="PCR">
-                            <input class="form" id="savebutton" onclick="saveLogEntryData(false)" type="button" value="Save">
-                            <input class="form" id="doneButton" onclick="saveLogEntryData(true)" type="button" value="Done">
+                            <input class="form" id="savebutton" onclick="saveLogEntryData(false)" type="button"
+                                   value="Save">
+                            <input class="form" id="doneButton" onclick="saveLogEntryData(true)" type="button"
+                                   value="Done">
                             <input class="form" id="copyButton" onclick="mkCopy()" type="button" value="Copy">
                             <span id="savestatus"></span>
                         </span>
@@ -285,9 +285,14 @@
             <input id="pcrPtID" name="pcrPtID" type="hidden" value="">
             <table class="entry-form">
                 <tr>
-                   <td colspan="2">
-                       <input type="button" value="Back To Log Entry" onclick='switchCards("#entry")'>
-                   </td>
+                    <td colspan="2">
+                       <span>
+                           <img id="pcrReplicated" width='16' height='16' src="images/localonly.png">
+                           <input type="button" value="Back To Log Entry" onclick='switchCards("#entry")'>
+                           <input type="button" value="Save" onclick="savePCR()">
+                           <input type="button" value="Add Intervention" onclick="addPcrActionsRow()">
+                       </span>
+                    </td>
                 </tr>
                 <tr>
                     <th>Name :</th>
@@ -304,7 +309,7 @@
 
                 <tr>
                     <th>Tracking :</th>
-                    <td><input class="shortentry" id="pcr_tracking" type="text" disabled></td>
+                    <td><input class="detailentry" id="pcr_tracking" type="text" disabled></td>
                 </tr>
                 <tr>
                     <th>Incident Time :</th>
@@ -312,11 +317,11 @@
                 </tr>
                 <tr>
                     <th>Incident Location :</th>
-                    <td><input class="shortentry" id="pcr_incident_location" type="text" ></td>
+                    <td><input class="detailentry" id="pcr_incident_location" type="text"></td>
                 </tr>
                 <tr>
                     <th>Incident Description :</th>
-                    <td><input class="detailentry" id="pcr_incedent_desc" type="text" ></td>
+                    <td><input class="detailentry" id="pcr_incedent_desc" type="text"></td>
                 </tr>
 
                 <tr>
@@ -334,17 +339,6 @@
             </table>
         </div>
         <div>
-            <table class="entry-form">
-                <tr>
-                    <th>Actions</th>
-                    <td>
-                        <span>
-                            <input type="button" value="Save" onclick="savePCR()">
-                            <input type="button" value="Add Intervention" onclick="addPcrActionsRow()">
-                        </span>
-                    </td>
-                </tr>
-            </table>
             <table id="pcrActionsTable" class="pcr-actions">
                 <tbody id="pcrActions">
                 <tr>
@@ -357,7 +351,7 @@
             <span>Notes</span>
             <br>
             <span class="pcrNotes">
-                <textarea  style="width: 100%" id="pcrnotes" name="pcrnotes" rows="3"></textarea>
+                <textarea style="width: 100%" id="pcrnotes" name="pcrnotes" rows="3"></textarea>
             </span>
             <hr>
             <table class="entry-form">
