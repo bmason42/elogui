@@ -17,9 +17,12 @@ function launchPCR() {
     $("#pcr_age").val(data.patientInfo.ptAge);
     $("#pcr_gender").val(data.patientInfo.ptGender);
     $("#pcrPtID").val(data.logEntry.ptID);
-
+    //seed incicdent time with arrival
+    let d = new Date(data.logEntry.arrival);
+    let tmp = mkFormattedDateForInputField(d);
+    $("#pcr_incdent_time").val(tmp)
     switchCards("#pcr")
-    fetchPcrRecord(data.trackingID)
+    fetchPcrRecord(data.logEntry.trackingID)
 }
 
 function savePCR() {
@@ -30,7 +33,7 @@ function savePCR() {
     pcr.ptID = $("#pcrPtID").val();
     pcr.incidentLocation = $("#pcr_incident_location").val();
     pcr.incidentTime = $("#pcr_incdent_time").val() + ":00" + tzOffset;
-    pcr.incidentDescription = $("#pcr_incedent_desc").val();
+    pcr.incidentDescription = $("#pcr_incident_desc").val();
     pcr.history = $("#pcr_history").val();
     pcr.allergies = $("#pcr_allergies").val();
     pcr.medications = $("#pcr_medications").val();
@@ -58,27 +61,28 @@ function loadPcrIntoUI(pcr,localonly) {
     if (pcr == null){
         return
     }
-    var imgSrc="imaages/localonly.png";
+    var imgSrc="images/localonly.png";
     if (!localonly){
         if (pcr.replicated){
-            imgSrc="imaages/sync.png";
+            imgSrc="images/sync.png";
         }else {
-            imgSrc = "imaages/notsynced.png";
+            imgSrc = "images/notsynced.png";
         }
     }
     $("#pcrReplicated").attr("src",imgSrc);
     $("#pcr_tracking").val(pcr.trackingID);
     $("#pcrPtID").val(pcr.ptID);
-    $("#pcr_incident_location").val(pcr.incidentLocation);
     let d = new Date(pcr.incidentTime);
     let tmp = mkFormattedDateForInputField(d);
     $("#pcr_incdent_time").val(tmp)
-    $("#pcr_incedent_desc").val(pcr.incidentDescription);
+    $("#pcr_incident_location").val(pcr.incidentLocation);
+    $("#pcr_incident_desc").val(pcr.incidentDescription);
+
     $("#pcr_history").val(pcr.history);
     $("#pcr_allergies").val(pcr.allergies);
     $("#pcr_medications").val(pcr.medications);
     $("#pcrnotes").val(pcr.comments);
-    $('#refuse').val(pcr.refusal)
+    $('#refuse').prop("checked", pcr.refusal);
     $("#refusalSig").val(pcr.ptRefusalSignature);
     $("#refusalWitness").val(pcr.witnessName);
 
