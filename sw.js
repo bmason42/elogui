@@ -34,6 +34,7 @@ var filesToCache = [
     "/scripts/logentry.js",
     "/scripts/main.js",
     "/scripts/menu.js",
+    "/scripts/pcr.js",
     "/scripts/settings.js",
     "/scripts/ww.js",
 
