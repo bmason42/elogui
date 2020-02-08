@@ -11,6 +11,8 @@ function addPcrActionsRow() {
 }
 
 function launchPCR() {
+    $("#pcrActions").empty();
+    addInterventionHeader();
     let data = saveLogEntryData(false)
     $("#pcr_tracking").val(data.logEntry.trackingID);
     $("#pcr_name").val(data.patientInfo.ptFirstName + " " +data.patientInfo.ptLastName );
@@ -41,7 +43,9 @@ function savePCR() {
     pcr.refusal = $('#refuse').is(":checked");
     pcr.ptRefusalSignature = $("#refusalSig").val();
     pcr.witnessName = $("#refusalWitness").val();
-    //pcr.interventions
+
+    pcr.interventions=fetchActionsFromUI()
+
 
 
     let json = JSON.stringify(pcr);
@@ -86,9 +90,19 @@ function loadPcrIntoUI(pcr,localonly) {
     $("#refusalSig").val(pcr.ptRefusalSignature);
     $("#refusalWitness").val(pcr.witnessName);
 
+    if (typeof pcr.interventions == 'undefined'){
+        pcr.interventions=[];
+    }
+    for (var i=0;i<pcr.interventions.length;i++){
+        var data=pcr.interventions[i];
+        addPcrActionsRow(data)
+    }
+
 }
+
+
 function fetchPcrFromLocalStorage(trackingID) {
-    var json = localStorage.getItem(SAVED_PCR_PREFIX + id);
+    var json = localStorage.getItem(SAVED_PCR_PREFIX + trackingID);
     var data = JSON.parse(json)
     return data;
 }
@@ -110,4 +124,52 @@ function fetchRemotePcrRecord(trackingID) {
     }).then(function (data) {
         loadPcrIntoUI(data,false);
     })
+}
+function addInterventionHeader() {
+    let headerRow="<tr><th>Time</th> <th>Description</th> <th>Provider</th> </tr>"
+    var actionList = $("#pcrActions");
+    actionList.append(headerRow);
+
+}
+function fetchActionsFromUI() {
+    var ret=[]
+    var rowCount = $('#pcrActions tr').length;
+    let tzOffset = makeTZOffset();
+    for (var i=1;i<rowCount;i++){
+        var action=new Object()
+        action.timestamp= $("#action_ts_"+i).val() + ":00" + tzOffset;
+        action.description=$("#action_desc_"+i).val();
+        action.provider=$("#action_provider_"+i).val();
+        ret[i-1]=action;
+    }
+    return ret;
+}
+function addPcrActionsRow(data) {
+    var markup = "<tr>" ;
+
+    var rowCount = $('#pcrActions tr').length;
+    console.log("Table row count: " + rowCount)
+    var timestamp=new Date()
+    var description ;
+    var provider;
+    if (data == null){
+        timestamp=new Date()
+        description="";
+        provider="";
+    }else {
+        timestamp = new Date(data.timestamp);
+        description=data.description;
+        provider=data.provider;
+    }
+    var dstr=mkFormattedDateForInputField(timestamp);
+    markup +="<td><input type='datetime-local' id='action_ts_" +rowCount + "' value='"  +dstr + "'> </td>"
+    markup += "<td  class='pcr-actions-description'><input type='text' id='action_desc_" +rowCount + "' value='"+description +" '></td>";
+    markup += "<td><input type='text' id='action_provider_" +rowCount + "' value='"+ provider + " '></td>";
+    markup +="</tr>"
+    var actionList = $("#pcrActions");
+    actionList.append(markup);
+
+
+
+
 }

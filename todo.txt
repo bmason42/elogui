@@ -1,4 +1,0 @@
-Web and service worker are running.
--- here > Now check data being pulled from the form matches data for REST API.  Get Save of log entry working
-Get gifted back online
-get PCR Working

@@ -534,17 +534,7 @@ function addGiftRow( data) {
     $loglist.append(markup);
 }
 
-function addPcrActionsRow() {
-    var markup = "<tr>" ;
-    var timestamp=new Date()
-    var dstr=mkFormattedDateForInputField(timestamp);
-    markup +="<td><input type='datetime-local' value='"  +dstr + "'> </input></td>"
-    markup += "<td  class='pcr-actions-description'><input type='text'></td>";
-    markup += "<td><input type='text'></td>";
-    markup +="</tr>"
-    var $loglist = $("#pcrActions");
-    $loglist.append(markup);
-}
+
 
 function fetchGiftItems() {
     var eventId = getCurrentEventId();

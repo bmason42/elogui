@@ -290,7 +290,7 @@
                            <img id="pcrReplicated" width='16' height='16' src="images/localonly.png">
                            <input type="button" value="Back To Log Entry" onclick='switchCards("#entry")'>
                            <input type="button" value="Save" onclick="savePCR()">
-                           <input type="button" value="Add Intervention" onclick="addPcrActionsRow()">
+                           <input type="button" value="Add Intervention" onclick="addPcrActionsRow(null)">
                        </span>
                     </td>
                 </tr>
@@ -341,11 +341,7 @@
         <div>
             <table id="pcrActionsTable" class="pcr-actions">
                 <tbody id="pcrActions">
-                <tr>
-                    <th>Time</th>
-                    <th>Description</th>
-                    <th>Provider</th>
-                </tr>
+
                 </tbody>
             </table>
             <span>Notes</span>
