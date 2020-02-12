@@ -17,6 +17,7 @@ const SAVED_RECORD_PREFIX="elog.record."
 const SAVED_PCR_PREFIX="elog.pcr."
 const SAVED_GIFT_PREFIX="elog.gifted."  //prefix for count of gifts
 const GIFT_ID_LIST="elog.gifted.id"
+const GIFT_UI_ID_PREFIX="giftedId_"
 /**************** Globals  *****************/
 const baseURL="/elog/v2/"
 var ccMap=[];
@@ -282,6 +283,13 @@ function processListData(data) {
             let units = unitsString.split("|")
             unitMap[data.events[i].eventID] = units;
         }
+        $("#giftedsupplies").empty()
+        for (var i=0;i<data.supplies.length;i++) {
+            if(!data.supplies[i].hasOwnProperty("count")){
+                data.supplies[i].count=0;
+            }
+            addGiftRow(data.supplies[i])
+        }
 
     } catch (oops) {
         handleError(oops);
@@ -525,60 +533,18 @@ function fetchListOfLocalPcrIds() {
 
 function addGiftRow( data) {
     label=data.label;
-    var id=data.id;
+    var id=data.supplyID;
     var markup = "<tr>" ;
+    var count=0;
     //markup+= "<td>" + label + "</td>";
-    markup +="<td><span id='supplyvalue" +id +"'>"  +data.count + "</span></td>"
-    markup += "<td><input type='button' class='incrementbutton' value='" + label + " Increment' onclick='doGiftIncrement(" + id + ")'></td>";
+    markup +="<td> <span>";
+    markup +="<input type='button' class='incrementbutton' value='" + label +"' onclick='doGiftIncrement(" + id + ")'>"
+    markup+="<span id='"+ GIFT_UI_ID_PREFIX +id + "'>" +data.count + "</span>"
+    markup+="</span> </td>"
     var $loglist = $("#giftedsupplies");
     $loglist.append(markup);
 }
 
-
-
-function fetchGiftItems() {
-    var eventId = getCurrentEventId();
-    $.ajax({
-        url: "/api/supplies/" + eventId
-    }).then(function (data) {
-        var listOfIds=[]
-        for (var i = 0; i < data.length; i++) {
-
-            var localdata=loadLocalGiftRecord(data[i].id);
-            if ( localdata == null){
-                localdata=new Object();
-                localdata.count=data[i].count;
-                localdata.pending=0;
-                localdata.remoteInProgress=false;
-                localdata.label=data[i].label;
-                localdata.id=data[i].id;
-                console.log("Making new Record")
-            }else{
-                console.log("Using found local data " + localdata.count  + " / " + localdata.pending)
-            }
-
-            //take the serveer count as a give but add on any pending local.
-            localdata.count=data[i].count + localdata.pending;
-            localdata.remoteInProgress = false; //when we reload here, set any in progress to false
-            saveLocalGiftedRecord(localdata)
-
-            listOfIds.push(localdata.id)
-        }
-        saveGiftedSupplyIdList(listOfIds)
-
-    }).always(function (data){
-        buildGiftTable();
-    });
-}
-function buildGiftTable(){
-    $("#giftedsupplies").empty()
-    var giftIds=fetchGiftedSupplyIdList();
-    for (var i=0;i<giftIds.length;i++) {
-        var giftId = giftIds[i];
-        var data=loadLocalGiftRecord(giftId);
-        addGiftRow(data);
-    }
-}
 function doGiftIncrement(supplyId){
     var json=localStorage.getItem(SAVED_GIFT_PREFIX + supplyId)
     var localdata=null;
@@ -655,17 +621,4 @@ function fetchGiftedSupplyIdList() {
         listOfIds = [];
     }
     return listOfIds;
-}
-function saveGiftedSupplyIdList(list){
-    var json=JSON.stringify(list);
-    localStorage.setItem(GIFT_ID_LIST,json)
-}
-
-function clearLocalGiftedSupplies() {
-    var giftIds = fetchGiftedSupplyIdList()
-    for (var i = 0; i < giftIds.length; i++) {
-        var giftId = giftIds[i];
-        localStorage.removeItem(SAVED_GIFT_PREFIX + id);
-    }
-    localStorage.removeItem(GIFT_ID_LIST)
 }

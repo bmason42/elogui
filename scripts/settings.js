@@ -27,8 +27,6 @@ function onEventChange(item) {
     unitSel.val(unitToSelect)
     localStorage.setItem(UNIT_ID,unitToSelect)
     $("#eventName").text(eventMap[eventId])
-    clearLocalGiftedSupplies()
-    //fetchGiftItems()
 
 }
 function onStationChange(item) {

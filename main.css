@@ -226,8 +226,21 @@ input.form{
     font-size: var(--font-size);
 }
 
+
+div.gifted{
+    background-color: var(--hidden-color);
+    position: relative;
+    left: var(--left-offset);
+    width: 25%;
+    padding: 3px;
+    overflow-y: auto;
+}
 input.incrementbutton{
-    width: 100%;
+    width: 75%;
     height: 100%;
+    font-size: var(--font-size);
+}
+div.gifted span{
+    padding-left: 10px;
     font-size: var(--font-size);
 }
