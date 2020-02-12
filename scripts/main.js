@@ -452,15 +452,52 @@ function handleSaveCallback(event){
         sendPcrRecordToServer(json)
     }
 
-    /*
-    var giftIds=fetchGiftedSupplyIdList();
-    for (var i=0;i<giftIds.length;i++){
-        var giftId = giftIds[i];
+    incrementSuppliesOnServer();
 
-        doIncrementOnRemoteServer(giftId)
+}
+function incrementSuppliesOnServer() {
+    let eventID=getCurrentEventId();
+    var json=localStorage.getItem(SAVED_GIFT_PREFIX + eventId);
+    if ( (json == null)  || (json.length==0 )) {
+        return;
     }
-    */
-
+    var listToUpdate=[];
+    var i=0;
+    let localdata = JSON.parse(json)
+    for (let prop in localdata) {
+        if (localdata.hasOwnProperty(prop)) {
+            let counts=localdata[prop]
+            if (counts.pending>0){
+                //the api does not know pending, it needs the count in the count field, little backwards
+                counts.count=counts.pending;
+                listToUpdate[i++]=counts
+            }
+        }
+    }
+    if (listToUpdate.length == 0){
+        return;
+    }
+    let dataToSend=JSON.stringify(listToUpdate)
+    $.ajax({
+        type: 'POST',
+        url: baseURL + "supply-counts/"+eventID,
+        beforeSend: addHeaders,
+        contentType: "application/json",
+        processData: false,
+        data: dataToSend,
+        dataType: "text"
+    }).done(function (newOb) {
+        var updatedEntries = JSON.parse(newOb)
+        var storedJson=localStorage.getItem(SAVED_GIFT_PREFIX + eventId);
+        let currentData=JSON.parse(storedJson)
+        for (var i=0;i<updatedEntries.length;i++){
+            let prop=""+updatedEntries[i].supplyID
+            currentData[prop].pending-=localdata[prop].pending
+            currentData[prop].count=updatedEntries[i].count
+        }
+        storedJson=JSON.stringify(currentData)
+        localStorage.setItem(SAVED_GIFT_PREFIX + eventId,storedJson)
+    });
 
 }
 function sendLogRecordToServer(json) {
@@ -546,7 +583,7 @@ function addGiftRow( data) {
 }
 
 function doGiftIncrement(supplyId){
-    let propName="" + supplyId
+    let propName=supplyId
     let eventId=getCurrentEventId()
     var json=localStorage.getItem(SAVED_GIFT_PREFIX + eventId)
     var localdata=null;
@@ -562,7 +599,8 @@ function doGiftIncrement(supplyId){
     }else{
         propData=new Object()
         propData.pending=0;
-        propData.supplyID=supplyId;
+        propData.supplyID=parseInt(supplyId);
+        propData.eventID=parseInt(eventId);
         propData.count=0
         localdata[propName]=propData
     }
@@ -579,54 +617,3 @@ function doGiftIncrement(supplyId){
 
 }
 
-function loadLocalGiftRecord(id) {
-    var eventId = getCurrentEventId();
-    var json = localStorage.getItem(SAVED_GIFT_PREFIX + id);
-    var data =null;
-    if ( (json != null ) && (json.length>0) ){
-        data = JSON.parse(json)
-    }
-    return data;
-}
-
-function doIncrementOnRemoteServer(id) {
-    console.log("Increment on server  " + id)
-    var localdata =loadLocalGiftRecord(id);
-    if ( localdata != null) {
-        var incrementAmt=localdata.pending;
-        if ( (incrementAmt > 0)  && !localdata.remoteInProgress) {
-            //stops the record from being resent while async op occures
-            localdata.remoteInProgress=true;
-            saveLocalGiftedRecord(localdata)
-            $.ajax({
-                type: 'POST',
-                url: "/api/supplies/increment/" + eventId + "/" + id + "?count=" + incrementAmt
-            }).then(function (payload) {
-                //refetch it to be safe
-                var data = loadLocalGiftRecord(id)
-                data.pending = data.pending - incrementAmt;
-                //safty check
-                if (data.pending < 0) {
-                    data.pending = 0;
-                }
-                data.count = payload.count + data.pending
-                saveLocalGiftedRecord(data)
-
-            }).always(function (data){
-                var data = loadLocalGiftRecord(id)
-                data.remoteInProgress=false;
-                saveLocalGiftedRecord(data);
-            });
-        }
-    }
-}
-function fetchGiftedSupplyIdList() {
-    var idjson = localStorage.getItem(GIFT_ID_LIST)
-    var listOfIds;
-    if ((idjson != null) && (idjson.length > 0)) {
-        listOfIds = JSON.parse(idjson)
-    } else {
-        listOfIds = [];
-    }
-    return listOfIds;
-}
