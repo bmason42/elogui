@@ -546,31 +546,39 @@ function addGiftRow( data) {
 }
 
 function doGiftIncrement(supplyId){
-    var json=localStorage.getItem(SAVED_GIFT_PREFIX + supplyId)
+    let propName="" + supplyId
+    let eventId=getCurrentEventId()
+    var json=localStorage.getItem(SAVED_GIFT_PREFIX + eventId)
     var localdata=null;
     if ( (json != null)  && (json.length>0 )) {
         localdata = JSON.parse(json)
     }else{
         localdata=new Object();
-        localdata.count=0;
-        localdata.pending=0;
-        localdata.id=supplyId;
     }
-    localdata.pending=localdata.pending+1
-    console.log("Did increment " + supplyId + " / " + localdata.pending);
-    localdata.count=localdata.count+1;
-    saveLocalGiftedRecord(localdata)
-    var idsel = "#supplyvalue"+localdata.id;
+
+    var propData
+    if (localdata.hasOwnProperty(propName)) {
+        propData=localdata[propName]
+    }else{
+        propData=new Object()
+        propData.pending=0;
+        propData.supplyID=supplyId;
+        propData.count=0
+        localdata[propName]=propData
+    }
+    propData.pending=propData.pending+1;
+    propData.count=propData.count+1;
+
+    json=JSON.stringify(localdata);
+    localStorage.setItem(SAVED_GIFT_PREFIX + eventId,json);
+
+    var idsel = "#"+GIFT_UI_ID_PREFIX+propData.supplyID;
     var valuespan = $(idsel);
-    valuespan.html(localdata.count)
+    valuespan.html(propData.count)
+
 
 }
 
-function saveLocalGiftedRecord(data) {
-    var json = JSON.stringify(data);
-    localStorage.setItem(SAVED_GIFT_PREFIX + data.id, json)
-    return ;
-}
 function loadLocalGiftRecord(id) {
     var eventId = getCurrentEventId();
     var json = localStorage.getItem(SAVED_GIFT_PREFIX + id);
