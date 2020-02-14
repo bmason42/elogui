@@ -393,6 +393,13 @@ function switchCards(id){
 }
 function dologout() {
     turnOnwait()
+    caches.delete("elogapp-v2");
+    localStorage.removeItem(AUTH_TOKEN)
+    localStorage.removeItem(CURRENT_USERID)
+    localStorage.removeItem(LIST_DATA)
+    turnOffWait()
+    window.open("/login.html", '_self', false)
+    /*
     $.ajax({
         type: 'POST',
         url: "/utils/logout",
@@ -405,6 +412,8 @@ function dologout() {
         turnOffWait()
         window.open("login.html", '_self', false)
     });
+
+     */
 
 }
 

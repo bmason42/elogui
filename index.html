@@ -12,10 +12,14 @@
     <script src="scripts/logentry.js"></script>
     <script src="scripts/pcr.js"></script>
     <script>
-
+        token=localStorage.getItem(AUTH_TOKEN)
+        if (token == null || token.length==0){
+            window.open("/login.html", '_self', false)
+        }
 
         $(document).ready(function () {
             $(document).ajaxError(errorHandler);
+
             registerBackgroundWorkers();
             initMenu()
             switchCards("#settings")
@@ -90,6 +94,7 @@
                         </div>
                     </a>
                 </td>
+                <!--
                 <td>
                     <a href="#" id="giftsmenu">
                         <div class="menu-item">
@@ -98,6 +103,7 @@
                         </div>
                     </a>
                 </td>
+                -->
                 <td>
                     <a href="#" id="logoutmenu">
                         <div class="menu-item">
