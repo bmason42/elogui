@@ -464,10 +464,11 @@ function handleSaveCallback(event){
     console.log(event)
 
     for (var i=0;i<ids.length;i++){
-        let logrecord = ids[i];
+        let logrecordID = ids[i];
+        var json = localStorage.getItem(SAVED_RECORD_PREFIX + logrecordID);
+        let logRecord=JSON.parse(json);
         //filter out records with no names.
-        if (logrecord.patientInfo.ptFirstName.length >0) {
-            var json = localStorage.getItem(SAVED_RECORD_PREFIX + logrecord);
+        if (logRecord.patientInfo.ptFirstName.length >0){
             sendLogRecordToServer(json)
         }
     }
