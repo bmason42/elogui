@@ -118,7 +118,6 @@ function loadRecordInfoUI(data) {
     d = new Date(data.logEntry.released);
     setReleasedField(d);
 
-    $("#ptname").val(data.patientInfo.ptFirstName);
     $("#ptFirstName").val(data.patientInfo.ptFirstName);
     $("#ptLastName").val(data.patientInfo.ptLastName);
 

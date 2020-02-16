@@ -140,9 +140,21 @@ function addLogEntryRow(summaryRecord,localsaved) {
 
 function fillCCSelect() {
     var cc = $("#cc")
+    var listOfStuff=[]
     for (var key in ccMap) {
-        var value = ccMap[key];
-        cc.append($('<option>', {value:key, text:value}));
+        var data=new Object()
+        data.key=key
+        data.value = ccMap[key];
+        listOfStuff[listOfStuff.length]=data
+    }
+    listOfStuff.sort(function (a,b) {
+        return a.value.localeCompare(b.value)
+    })
+    for (var i=0;i<listOfStuff.length;i++)
+    {
+        var key=listOfStuff[i].key;
+        var value=listOfStuff[i].value;
+        cc.append($('<option>', {value: key, text: value}));
     }
 }
 
@@ -264,7 +276,7 @@ function addHeaders(xhr) {
 function processListData(data) {
     try {
         for (var i = 0; i < data.ccs.length; i++) {
-            ccMap[data.ccs[i].id] = data.ccs[i].label;
+            ccMap[data.ccs[i].id] = data.ccs[i].header + " - " + data.ccs[i].label;
         }
         for (var i = 0; i < data.dispos.length; i++) {
 
@@ -393,27 +405,28 @@ function switchCards(id){
 }
 function dologout() {
     turnOnwait()
-    caches.delete("elogapp-v2");
     localStorage.removeItem(AUTH_TOKEN)
     localStorage.removeItem(CURRENT_USERID)
     localStorage.removeItem(LIST_DATA)
-    turnOffWait()
-    window.open("/login.html", '_self', false)
-    /*
+    //this cache name is defined in servicework.js
+    caches.delete("elogapp-v2");
+
+
+
+    //fire and forget this
     $.ajax({
         type: 'POST',
-        url: "/utils/logout",
+        url: "/elog/v2/logout",
         contentType: "application/json",
         processData: false,
         dataType: "text"
-    }).then(function (newOb) {
-        //this cache name is defined in servicework.js
-        caches.delete("elogapp-v2");
+    }).done(function (newOb) {
+        console.log("Logged out")
         turnOffWait()
-        window.open("login.html", '_self', false)
+        window.open("/login.html", '_self', false)
     });
 
-     */
+
 
 }
 
@@ -451,8 +464,12 @@ function handleSaveCallback(event){
     console.log(event)
 
     for (var i=0;i<ids.length;i++){
-        var json = localStorage.getItem(SAVED_RECORD_PREFIX + ids[i]);
-        sendLogRecordToServer(json)
+        let logrecord = ids[i];
+        //filter out records with no names.
+        if (logrecord.patientInfo.ptFirstName.length >0) {
+            var json = localStorage.getItem(SAVED_RECORD_PREFIX + logrecord);
+            sendLogRecordToServer(json)
+        }
     }
 
     var pcrIds=fetchListOfLocalPcrIds()

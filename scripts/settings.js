@@ -21,7 +21,7 @@ function onEventChange(item) {
             unitToSelect=currentUnit
         }
     }
-    if (unitToSelect.length <0) {
+    if (unitToSelect.length ==0) {
         unitToSelect = unitList[0];
     }
     unitSel.val(unitToSelect)
