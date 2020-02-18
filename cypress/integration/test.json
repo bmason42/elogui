@@ -1,0 +1,7 @@
+describe('My first test',function(){
+  it('Load the page',function(){
+    cy.visit('https://www.patientlog.us/')
+    cy.get('#userid').type('emstest')
+    cy.get('#password').type('test')
+  })
+})

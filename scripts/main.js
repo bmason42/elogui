@@ -149,7 +149,8 @@ function fillCCSelect() {
     }
     listOfStuff.sort(function (a,b) {
         return a.value.localeCompare(b.value)
-    })
+    });
+    cc.empty()
     for (var i=0;i<listOfStuff.length;i++)
     {
         var key=listOfStuff[i].key;
@@ -160,6 +161,7 @@ function fillCCSelect() {
 
 function fillDispoSelect() {
     var disp = $("#disp");
+    disp.empty()
     for (var key in dispMap) {
         var value = dispMap[key];
         disp.append($('<option>', {value:key, text:value}));
@@ -167,6 +169,7 @@ function fillDispoSelect() {
 }
 function  fillCareLevelSelect() {
     var cl=$("#carelevel");
+    cl.empty()
     for (var key in careLevelMap){
         var value=careLevelMap[key];
         cl.append($('<option>', {value:key, text:value}));
@@ -174,6 +177,7 @@ function  fillCareLevelSelect() {
 }
 function fillTxSelect() {
     var disp = $("#tx")
+    disp.empty()
     for (var key in txMap) {
         var value = txMap[key];
         disp.append($('<option>', {value:key, text:value}));
@@ -309,24 +313,25 @@ function processListData(data) {
 }
 
 function fetchListData(callback) {
+    //first try to use what we have stored
     let storedJSON = localStorage.getItem(LIST_DATA);
     if (storedJSON != null){
         var data=JSON.parse(storedJSON)
         processListData(data)
         callback()
-    }else {
-        var ajax = $.ajax({
-            url: baseURL + "choicelists/",
-            cache: true,
-            beforeSend: addHeaders,
-        });
-        ajax.then(function (data) {
-            processListData(data);
-            var jsondata=JSON.stringify(data)
-            localStorage.setItem(LIST_DATA,jsondata)
-            callback();
-        });
     }
+    var ajax = $.ajax({
+        url: baseURL + "choicelists/",
+        cache: true,
+        beforeSend: addHeaders,
+    });
+    //try to grab the data, if we are online, yay!, if not, hopefully we have stored lists
+    ajax.then(function (data) {
+        processListData(data);
+        var jsondata=JSON.stringify(data)
+        localStorage.setItem(LIST_DATA,jsondata)
+        callback();
+    });
 }
 
 function handleError(error){
