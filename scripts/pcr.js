@@ -41,6 +41,7 @@ function savePCR() {
     pcr.medications = $("#pcr_medications").val();
     pcr.comments = $("#pcrnotes").val();
     pcr.refusal = $('#refuse').is(":checked");
+    pcr.hippaRelease=$('#hippaRelease').is(":checked")
     pcr.ptRefusalSignature = $("#refusalSig").val();
     pcr.witnessName = $("#refusalWitness").val();
 
@@ -87,6 +88,7 @@ function loadPcrIntoUI(pcr,localonly) {
     $("#pcr_medications").val(pcr.medications);
     $("#pcrnotes").val(pcr.comments);
     $('#refuse').prop("checked", pcr.refusal);
+    $('#hippaRelease').prop("checked", pcr.hippaRelease);
     $("#refusalSig").val(pcr.ptRefusalSignature);
     $("#refusalWitness").val(pcr.witnessName);
 
